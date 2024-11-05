@@ -1,0 +1,45 @@
+.simple_hero {
+  width: 100vw;
+  height: 170px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.filter_and_product_container {
+  display: grid;
+  grid-template-columns: 1fr 3.3fr;
+  gap: 2vw;
+  padding-inline: var(--margin-inline-laptop);
+  width: 100vw;
+  overflow: hidden;
+}
+
+.products_container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.banner {
+  width: 100vw;
+  height: 60vh;
+}
+
+@media (max-width: 700px) {
+  .filter_and_product_container {
+    grid-template-columns: 1fr;
+    padding-inline: 3vw;
+  }
+
+  .simple_hero {
+    padding-inline: 5vw;
+    justify-content: space-between;
+    align-items: center;
+    height: 140px;
+  }
+}

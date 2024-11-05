@@ -1,0 +1,181 @@
+.menu {
+  width: 310px;
+  /* border: 1px solid blue; */
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filters button {
+  border: none;
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--primary);
+}
+.filters button p {
+  font-size: 0.7rem !important;
+  margin-inline: 3px;
+  color: var(--neutral);
+}
+.filters button path {
+  fill: var(--neutral) !important;
+}
+.filterAndClear {
+  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--body);
+}
+.filterAndClear h5 {
+  font-size: 0.85rem !important;
+  cursor: pointer;
+}
+
+.dropdown_filter_main > ul ::-webkit-scrollbar {
+  width: 5px !important;
+  /* color: #FAFAFA; */
+  background-color: transparent;
+  background-color: white;
+  /* border: 1px solid var(--main-red-dark); */
+  border-radius: 5px;
+}
+.dropdown_filter_main > ul ::-webkit-scrollbar-thumb {
+  width: 9px !important;
+  border-radius: 6px !important;
+  background-color: var(--secondary) !important;
+}
+.filter_button_open {
+  position: fixed;
+  height: 6.5vh;
+  bottom: 0px;
+  right: 0px;
+  width: 100%;
+  z-index: 999989999;
+  background-color: var(--primary);
+  display: flex;
+  color: var(--neutral);
+  justify-content: space-around;
+}
+
+.filter_button {
+  /* position: absolute;
+    top: 52vh;
+    right: 5vw; */
+  justify-self: right;
+  display: none;
+  justify-content: right;
+  z-index: 9999;
+  margin-right: 5vw;
+  margin-bottom: 15px;
+
+  /* display: none; */
+}
+.filter_button span {
+  display: flex;
+  gap: 5px;
+  background-color: var(--primary);
+  color: var(--neutral);
+  padding: 3px 8px;
+}
+
+.filter_button svg {
+  font-size: 1.5rem;
+  font-weight: 200;
+}
+.filter_button polygon {
+  stroke-width: 1.5;
+  stroke: var(--neutral);
+}
+/* .main_filter_container::before {
+    content: "";
+    width: 2px;
+    height: 91.5vh;
+    position: fixed;
+    left: 35vw;
+  } */
+
+.filter_modal_main {
+  height: 93.5vh;
+  overflow-y: auto;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 999999;
+  /* border: 2px solid red; */
+
+  background-color: var(--neutral);
+}
+
+.main_filter_container {
+  height: 91.5%;
+
+  display: flex;
+  overflow-y: auto;
+}
+.filter_modal_top {
+  height: 8vh;
+  padding-inline: 5vw;
+  border-bottom: 1px solid rgb(161, 159, 159);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter_items {
+  width: 35vw;
+  height: max-content;
+  border-right: 1px solid var(--secondary);
+  /* overflow-y: auto; */
+}
+.filter_items h5 {
+  padding: 25px 12px;
+  font-size: 1rem;
+  font-weight: 400;
+  border-bottom: 1px solid rgb(187, 187, 187);
+}
+
+.selected_filter {
+  top: 8vh;
+
+  width: 65vw;
+  padding: 2vh 5vw;
+  height: 100%;
+  /* border: 1px solid green; */
+
+  /* border-left: 1px solid rgb(187, 187, 187); */
+  background-color: var(--neutral);
+}
+
+.selected_filter span {
+  display: flex;
+  gap: 10px;
+  margin-block: 2.5vh;
+}
+.new_filter input {
+  height: 18px;
+  width: 18px;
+}
+.new_filter p {
+  font-size: 1.25rem;
+}
+@media (max-width: 700px) {
+  .filter_button {
+    display: flex;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
+
+@media (min-width: 1700px) {
+  .menu {
+    width: 550px !important;
+    /* height: 100px !important; */
+  }
+}

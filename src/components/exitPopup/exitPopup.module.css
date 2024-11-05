@@ -1,0 +1,187 @@
+.outer_overlay {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+}
+
+.modal_main {
+  height: 60vh;
+  width: 50vw;
+  display: grid;
+  border-radius: 10px;
+  grid-template-columns: 1fr 1fr;
+  background-color: rgb(255, 255, 255);
+  /* display: none; */
+}
+
+.left_part {
+  padding: 3vh 2vw;
+  display: grid;
+  place-items: center;
+}
+.left_part h2,
+.left_part2 h2,
+.left_part3 h2 {
+  font-size: 2.2rem;
+  text-align: center;
+}
+
+.left_part p,
+.left_part2 p,
+.left_part3 p {
+  text-align: center;
+  margin-block: 1vh;
+  line-height: 1.4rem;
+  font-size: 1.1rem;
+}
+.left_part input {
+  height: 35px;
+  width: 100%;
+  margin-block: 1vh;
+  border: 1px solid var(--primary);
+  padding-inline: 10px;
+  border-radius: 5px;
+}
+.btn_group {
+  height: fit-content;
+  width: 100%;
+}
+.left_part button,
+.left_part2 button {
+  margin-block: 1vh;
+  height: 35px;
+  width: 100%;
+  font-size: 1.05rem;
+}
+.btn_group button:first-child {
+  background-color: white;
+  color: var(--primary);
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn_group button:first-child:hover {
+  border: 1px solid var(--primary);
+}
+.btn_group button:nth-child(2) {
+  background-color: transparent;
+  color: var(--primary);
+  border: none;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.right_part {
+  position: relative;
+}
+
+.cross {
+  position: absolute;
+
+  top: 0.65rem;
+  right: 1.2rem;
+  /* border: 1px solid red; */
+  display: grid;
+  place-items: center;
+  height: 50px;
+  width: 50px;
+}
+
+.inner_cross {
+  background-color: var(--body);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.inner_cross:hover {
+  padding: 3px;
+  transition: padding 0.3s ease;
+}
+.inner_cross:not(:hover) {
+  padding: 6px;
+  transition: padding 0.3s ease;
+}
+.cross svg {
+  height: 24px;
+  width: 24px;
+}
+.left_part2 {
+  padding: 2vh 2vw;
+  display: grid;
+  place-items: center;
+}
+.input_group {
+  display: flex;
+  gap: 1vw;
+}
+.input_group input {
+  height: 35px;
+  padding-inline: 5px;
+}
+
+.btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.left_part3 {
+  padding: 2vh 2vw;
+  display: grid;
+  place-items: center;
+}
+
+.right_part img {
+  height: 60vh;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0px 10px 10px 0px;
+}
+
+@media (max-width: 1000px) {
+  .modal_main {
+    height: 55vh;
+    width: 80vw;
+    display: grid;
+    border-radius: 10px;
+    padding-inline: 4vw;
+    grid-template-columns: 1fr 0fr;
+    background-color: rgb(255, 255, 255);
+  }
+  .input_group {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+  }
+  .cross {
+    right: 0px;
+  }
+
+  .right_part img {
+    display: none;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1150px) {
+  .modal_main {
+    height: 50vh;
+    width: 60vw;
+  }
+  .cross {
+    position: absolute;
+    top: 12px;
+    right: -8px;
+  }
+  .cross svg {
+    color: var(--main-red-dark);
+  }
+}

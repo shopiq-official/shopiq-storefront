@@ -1,0 +1,31 @@
+.main_div {
+  background-color: white;
+  padding: 2.5rem 3rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.main_div h2 {
+  text-align: center;
+}
+
+.btn_section {
+  display: flex;
+  justify-content: space-between;
+  gap: 5vw;
+}
+.btn_section button {
+  font-size: 1.03rem;
+  padding: 8px 2.5rem;
+  cursor: pointer;
+}
+.btn_section button:first-child {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+}
+.btn_section button:nth-child(2) {
+  background-color: white;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}

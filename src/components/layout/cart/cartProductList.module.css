@@ -1,0 +1,174 @@
+
+.product {
+  min-height: 23vh;
+  max-height: 30vh;
+  height: fit-content;
+  padding: 15px 5px;
+  border-bottom: 1px solid lightgrey;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid green;
+  width: 100% !important;
+}
+
+.left {
+  display: flex;
+  gap: 10px;
+  text-transform: capitalize;
+  flex: 1;
+  align-self: center;
+  width: 80%;
+}
+
+.img {
+  /* height: 100%; */
+  width: 50%;
+  /* aspect-ratio: 1/1; */
+  background: white;
+  position: relative;
+}
+
+.img img {
+  object-fit: contain;
+  height: 100%;
+  width: 100%;
+}
+
+.product_category {
+  color: grey;
+}
+
+.about_product {
+  display: flex;
+  flex-direction: column;
+}
+.about_product p {
+  font-size: 0.8rem !important;
+}
+
+.about_product h2 {
+  font-weight: 500;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+.right {
+  /* height: 100%; */
+  padding-block: 10px;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.right h2 {
+  font-weight: 500;
+  font-size: 1.02rem;
+}
+
+.right svg {
+  cursor: pointer;
+}
+
+.right svg path {
+  fill: red;
+}
+
+.variants {
+  list-style: none;
+}
+
+.quantity_container {
+  height: fit-content;
+  width: 100px;
+  border: 1px solid var(--body);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 3px;
+  margin-top: 15px;
+}
+
+.quantity_container div {
+  height: 100%;
+  aspect-ratio: 1.15/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qc_decrease,
+.qc_increase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  background: var(--secondary);
+  cursor: pointer;
+}
+
+.qc_increase {
+  background: var(--primary);
+}
+
+.qc_decrease svg path,
+.qc_increase svg path {
+  fill: white;
+}
+
+.qc_fade {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.variants li {
+  width: 100% !important;
+}
+
+@media screen and (max-width: 600px) {
+  .img {
+    aspect-ratio: 1/1;
+    width: 55%;
+    margin-bottom: auto;
+  }
+  .left {
+    /* border: 1px solid red; */
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1.5fr;
+  }
+  .left > div {
+    /* border: 1px solid blue; */
+    width: 100%;
+  }
+
+  .about_product h2 {
+    margin-top: 5px;
+    font-size: 0.8rem;
+  }
+
+  .product_category {
+    font-size: 0.7rem;
+  }
+
+  .variants li {
+    font-size: 0.7rem;
+  }
+
+  .quantity_container {
+    height: 32px;
+    width: 90px;
+  }
+
+  .quantity_container div {
+    height: 100%;
+    aspect-ratio: 1/1;
+  }
+
+  .right h2 {
+    font-size: 1rem;
+  }
+}

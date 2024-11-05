@@ -1,0 +1,66 @@
+.static_four_cards {
+  margin-block: 5vh;
+  height: fit-content;
+  width: 100%;
+  background-color: var(--primary);
+  padding: 8vh 5vw;
+  color: var(--neutral);
+}
+.static_four_cards h1 {
+  text-align: center;
+  margin-bottom: 7.5vh;
+  font-size: 1.8rem !important;
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  /* grid-template-columns: repeat(4, 1fr); */
+  gap: 2.5vw;
+}
+.container > div {
+  display: flex;
+  gap: 12px;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid red; */
+}
+.container svg {
+  font-size: 3.4rem;
+}
+
+.container h5 {
+  font-weight: 400;
+  font-size: 1.4rem;
+  text-align: center;
+  letter-spacing: 1.1px;
+}
+.container p {
+  font-size: 1rem !important;
+  font-weight: 300;
+  text-align: center;
+}
+.container button {
+  margin-top: 1rem;
+  border: none;
+  background-color: var(--neutral);
+  font-size: 1.02rem;
+  cursor: pointer;
+  color: var(--primary);
+}
+
+@media (max-width: 600px) {
+  .container {
+    /* border: 2px solid red; */
+    display: grid;
+    gap: 5vh;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+@media (min-width: 1800px) {
+  .static_four_cards {
+    padding: 8vh 12vw;
+    color: var(--neutral);
+  }
+}

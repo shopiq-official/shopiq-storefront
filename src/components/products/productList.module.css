@@ -1,0 +1,32 @@
+.simple_hero {
+  width: 100vw;
+  height: 170px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.filter_and_product_container {
+  display: grid;
+  grid-template-columns: 1fr 3.3fr;
+  gap: 2vw;
+  padding-inline: var(--margin-inline-laptop);
+}
+
+.products_container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  height: fit-content;
+}
+
+@media (max-width: 700px) {
+  .products_container {
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    padding-bottom: 50px;
+  }
+}

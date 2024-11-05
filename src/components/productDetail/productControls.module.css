@@ -1,0 +1,279 @@
+.variants_container {
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+  /* border: 1px solid green; */
+}
+
+.variants_container > div:nth-child(1) {
+  order: 3;
+}
+
+.variants_container > div:nth-child(2) {
+  order: 2;
+}
+
+.variants_container select {
+  height: 23px;
+}
+
+.variants_container p {
+  font-size: 1.05rem;
+  height: fit-content;
+}
+
+.colors {
+  display: flex;
+  gap: 15px;
+}
+
+.color {
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+}
+
+.variant {
+  display: flex;
+  gap: 10px;
+}
+
+.variant div {
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  height: 27px;
+  padding-inline: 4px;
+  min-width: 27px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  font-size: 0.85rem;
+}
+
+.actions {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.actions {
+  padding-top: 0.5rem;
+  /* padding-right: 2rem; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.3rem;
+  height: fit-content;
+  /* border: 1px solid red; */
+}
+
+.actions h5 {
+  color: var(--primary);
+}
+
+.quantity_container {
+  height: fit-content;
+  width: 100px;
+  border: 1px solid var(--body);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 3px;
+}
+
+.quantity_container div {
+  height: 100%;
+  aspect-ratio: 1.15/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qc_decrease,
+.qc_increase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  background: var(--secondary);
+  cursor: pointer;
+}
+
+.qc_decrease svg path,
+.qc_increase svg path {
+  fill: white;
+}
+
+.qc_increase {
+  background: var(--primary);
+}
+
+.pricing span {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  /* border: 1px solid red; */
+  width: fit-content;
+}
+
+.pricing span {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  /* border: 1px solid red; */
+  width: fit-content;
+}
+
+.pricing h4 {
+  color: var(--secondary);
+  font-size: 1rem;
+  text-decoration: line-through;
+}
+
+.pricing p {
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+
+.main_actions {
+  display: flex;
+  gap: 2vw;
+}
+
+.buy_btn,
+.cart_btn {
+  height: 40px;
+  aspect-ratio: 5.5/1;
+
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+.buy_btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+}
+
+.cart_btn {
+  background: var(--neutral);
+  border: 1px solid var(--secondary);
+
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.cart_btn:hover {
+  /* background: var(--neutral); */
+  border: 1px solid var(--primary);
+
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.request_btn {
+  cursor: pointer;
+  height: 40px;
+  aspect-ratio: 4/1;
+  text-align: center;
+  text-decoration: underline;
+}
+.description {
+  margin-bottom: 16px;
+  text-transform: capitalize;
+}
+
+.text {
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.collapsed {
+  max-height: 4.5em; /* Enough for 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+.expanded {
+  max-height: none;
+}
+
+.toggleButton {
+  background-color: transparent;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 8px 0;
+  text-align: left;
+}
+
+
+@media screen and (max-width: 1000px) {
+  .main_actions {
+    display: flex;
+    gap: 2vw;
+    width: 100%;
+  }
+
+  .main_btn_group {
+    width: 100%;
+  }
+
+  .main_actions button {
+    width: 100%;
+  }
+
+  .actions {
+    /* grid-row: 2/3; */
+    padding-right: 0rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding-top: 0.5rem;
+    /* border: 1px solid red; */
+  }
+  .actions > div:nth-child(2) {
+    order: 2;
+  }
+  .actions > div:nth-child(1) {
+    order: 1;
+  }
+  .actions > div:nth-child(3) {
+    order: 2;
+  }
+
+  .actions h2 {
+    height: fit-content;
+    font-size: 6vw !important;
+  }
+  .actions button {
+    width: 97%;
+    height: 40px;
+    /* aspect-ratio: 4/1; */
+    /* border: none; */
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    /* border-radius: 10px; */
+  }
+
+  .description{
+    order: 4;
+  }
+
+  .quantity_container div {
+    width: 100%;
+  }
+
+  .main_btn_group > button:nth-child(1) {
+    order: 1;
+  }
+  .main_btn_group > button:nth-child(2) {
+    order: 1;
+  }
+}

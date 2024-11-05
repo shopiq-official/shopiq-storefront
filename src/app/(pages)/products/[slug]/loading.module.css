@@ -1,0 +1,99 @@
+.product_container {
+  display: flex;
+  padding-inline: 10vw;
+  width: 100%;
+  height: 70vh;
+  margin-top: 10vh;
+  /* border: 1px solid red; */
+}
+.product_image {
+  background-color: #eeeeee;
+}
+
+.product_image,
+.product_content {
+  flex: 1;
+  height: 100%; /* Adjust height as needed */
+  margin: 0 10px;
+}
+.product_content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.skeleton,
+.product_content {
+  animation: shine 0.8s infinite; /* Animation for the shining effect */
+}
+.product_content > p {
+  width: 80%;
+  height: 15px;
+  background-color: #eeeeee;
+}
+.product_content > h1 {
+  width: 50%;
+  height: 35px;
+  margin-block: 8px;
+  background-color: #eeeeee;
+}
+.product_content > h5 {
+  width: 70%;
+  height: 25px;
+  margin-block: 7px;
+  background-color: #eeeeee;
+}
+.product_content > div p:first-child {
+  width: 90%;
+  height: 14px;
+  margin-block: 7px;
+  background-color: #eeeeee;
+}
+.product_content > div p:nth-child(2) {
+  width: 40%;
+  height: 14px;
+  margin-block: 7px;
+  background-color: #eeeeee;
+}
+.product_content > div p:nth-child(3) {
+  width: 60%;
+  height: 14px;
+  margin-block: 7px;
+  background-color: #eeeeee;
+}
+.product_content > div p:nth-child(4) {
+  width: 20%;
+  height: 14px;
+  margin-block: 7px;
+  background-color: #eeeeee;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2vw;
+}
+.products span {
+  width: 100%;
+  height: 280px;
+  background-color: #eeeeee;
+  animation: shine 0.8s infinite;
+}
+
+@keyframes shine {
+  0% {
+    opacity: 0.1;
+  } /* Initial position for the shine */
+  100% {
+    opacity: 1;
+  } /* Final position for the shine */
+}
+
+@media (max-width: 700px) {
+  .product_container {
+    flex-direction: column;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

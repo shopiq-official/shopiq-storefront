@@ -1,0 +1,45 @@
+.static_section {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 2.5vh;
+}
+
+.static_section .overlay_text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: 1px solid red; */
+  padding-inline: 10vw;
+}
+
+.static_section img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.overlay_text button {
+  background-color: var(--primary);
+  font-size: 1.02rem;
+  border: none;
+  height: 6vh;
+  aspect-ratio: 4/1;
+  /* border-radius: 8px; */
+  width: fit-content;
+  color: var(--neutral);
+  margin-top: 1vh;
+  cursor: pointer;
+}
+
+@media (min-width: 1800px) {
+  .static_section .overlay_text {
+    padding-inline: var(--margin-inline-4k);
+  }
+}

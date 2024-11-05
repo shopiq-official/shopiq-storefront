@@ -1,0 +1,65 @@
+.embla {
+  max-width: calc(100vw - var(--website-padding-desktop));
+  margin: auto;
+  --slide-height: 19rem;
+  --slide-spacing: 0.8rem;
+  --slide-size: 25%;
+  position: relative;
+}
+
+.embla__viewport {
+  overflow: hidden;
+}
+
+.embla__container {
+  backface-visibility: hidden;
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+
+.embla__slide {
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding: var(--slide-spacing);
+}
+
+.embla__slide__number {
+  box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
+  border-radius: 1.8rem;
+  font-size: 4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--slide-height);
+}
+
+.embla__controls {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.embla__buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.embla__buttons button {
+  height: fit-content;
+  width: fit-content;
+}
+
+.embla__buttons button svg {
+  height: 18px !important;
+  width: 18px !important;
+}
+
+@media (max-width: 700px) {
+  .embla {
+    --slide-size: 50%;
+  }
+}

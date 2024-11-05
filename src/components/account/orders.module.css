@@ -1,0 +1,135 @@
+.orders {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.orders > li {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid lightgrey;
+  padding: 10px 10px;
+  width: 100%;
+}
+
+.order_products {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  list-style: none;
+}
+
+.order_products > li {
+  border-bottom: 1px solid grey;
+  padding: 15px 0;
+}
+
+.order_products > li:last-child {
+  border-bottom: none;
+}
+
+.main_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.id_and_date {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.about_product {
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  gap: 20px;
+}
+
+.order_id {
+  font-size: 1.2rem;
+  color: grey;
+}
+
+.product_img {
+  height: 150px;
+  width: 150px;
+  background: white;
+  object-fit: cover;
+}
+.product_img img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.product_details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.product_details span {
+  font-size: 0.9rem;
+  color: grey;
+}
+
+.product_details h3 {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.variant_details {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 4px;
+  color: grey;
+}
+
+.price_and_actions {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 80px;
+}
+
+.price_and_actions button {
+  height: 30px;
+  width: fit-content;
+  min-width: 120px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--secondary);
+  background-color: transparent;
+}
+.price_and_actions button:hover {
+  border: 1px solid var(--primary);
+}
+
+@media only screen and (max-width: 700px) {
+  .orders {
+    padding: 0px;
+    padding-top: 20px;
+  }
+
+  .order_id {
+    font-size: 0.9rem;
+    color: grey;
+  }
+
+  .id_and_date {
+    gap: 10px;
+  }
+
+  .id_and_date h4 {
+    font-size: 0.8rem;
+  }
+}

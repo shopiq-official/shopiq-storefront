@@ -1,0 +1,145 @@
+.container {
+  position: fixed;
+  z-index: 999999;
+  height: 100vh;
+  width: 35vw;
+  background-color: white;
+  top: 0;
+  right: 0;
+  transform: translateX(150%);
+  transition: 0.5s ease-in-out;
+  box-shadow: 0 7px 29px 0 hsla(240, 5%, 41%, 0.2);
+}
+.card_container {
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  /* max-height: 68vh; */
+}
+
+
+.container_open {
+  transform: translateX(0);
+}
+
+.empty_container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.container h4 {
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: var(--fourth-color);
+}
+
+.container p {
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+
+.cross {
+  /* border: 1px solid red; */
+  display: grid;
+  place-items: center;
+  height: 45px;
+  width: 45px;
+}
+
+.inner_cross {
+  background-color: var(--body);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.inner_cross:hover {
+  padding: 5px;
+  transition: padding 0.3s ease;
+}
+.inner_cross:not(:hover) {
+  padding: 8px;
+  transition: padding 0.3s ease;
+}
+.cross svg {
+  height: 24px;
+  width: 24px;
+}
+
+.close {
+  position: fixed;
+  z-index: 10000;
+  height: 100vh;
+  width: 100vw;
+  background-color: transparent;
+}
+
+@media screen and (max-width: 600px) {
+  .cross {
+    /* border: 1px solid red; */
+    display: grid;
+    place-items: center;
+    height: 30px;
+    width: 30px;
+    margin-right: 5px;
+  }
+
+  .inner_cross {
+    background-color: var(--body);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+  }
+  .inner_cross:hover {
+    padding: 3px;
+    transition: padding 0.3s ease;
+  }
+  .inner_cross:not(:hover) {
+    padding: 3px;
+    transition: padding 0.3s ease;
+  }
+  .cross svg {
+    height: 20px;
+    width: 20px;
+  }
+  .container {
+    width: 100vw;
+    height: 100vh;
+    transform: translateX(150%);
+    /* border: 2px solid red; */
+  }
+
+  .container h4 {
+    font-size: 1.2rem;
+  }
+
+  .container p {
+    font-size: 1rem;
+  }
+
+  .container_open {
+    transform: translateX(0);
+  }
+
+  /* .container div svg {
+      position: absolute;
+      height: 25px;
+      width: 25px;
+      top: 1.5rem;
+      right: 2rem;
+      cursor: pointer;
+    } */
+}
