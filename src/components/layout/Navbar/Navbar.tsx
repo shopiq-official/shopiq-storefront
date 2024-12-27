@@ -12,30 +12,29 @@ import { IconsPart } from "./IconsPart";
 import { Suspense } from "react";
 import { navSequence } from "@/lib/navSequence";
 import Banners from "./banner";
+import { Category, Discount, Product } from "@/types";
 
 export const Navbar = async () => {
-  const categories: any = await getCategoriesOfType();
-  const bestSellers: any = await getBestSeller();
-  const cat = await getCategories();
-  const bannerDiscounts: any = await getDiscountsApi();
+  const categories: Record<string, string | number | string[]> =
+    await getCategoriesOfType();
+  const bestSellers = (await getBestSeller()) as unknown as { data: Product[] };
+  const cat: Category = await getCategories();
+  const bannerDiscounts = (await getDiscountsApi()) as unknown as {
+    discounts: Discount[];
+  };
 
-  let banners = bannerDiscounts.discounts.filter(
-    (val: any) => val.visibility.banner
+  let banners = bannerDiscounts.discounts?.filter(
+    (val: Discount) => val.visibility && val.visibility.banner
   );
 
   return (
     <>
-      <Banners data={banners} />
+      {banners?.length > 0 && <Banners data={banners} />}
       <div className={styles.container}>
         <div className={styles.nav_second_row}>
           <div className={styles.logo_container}>
             <Link href="/" aria-label="Logo">
-              <Image
-                src="/images/logo.webp"
-                width="200"
-                height="500"
-                alt="logo"
-              />
+              <Image src="" width="200" height="500" alt="add your logo here" />
             </Link>
           </div>
           <div className={styles.navmenu}>
@@ -45,27 +44,13 @@ export const Navbar = async () => {
                   Shop
                 </Link>
               </li>
-              {navSequence(Object.keys(categories)).map(
-                (cate: any, index: number) => {
-                  return (
-                    <NavDropDown
-                      title={cate}
-                      categories={categories[cate]}
-                      key={index}
-                    />
-                  );
-                }
-              )}
+
               <li>
                 <Link aria-label="Collections page" href="/collections">
                   Collections
                 </Link>
               </li>
-              <li>
-                <Link aria-label="videos" href="/videos">
-                  Product Videos
-                </Link>
-              </li>
+
               <li>
                 <Link aria-label="Blogs page" href="/blogs">
                   Blogs

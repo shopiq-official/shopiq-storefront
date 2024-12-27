@@ -21,7 +21,7 @@ const ShareSection = () => {
   const pId = pathname.split("/").splice(-1);
 
   const shareUrl = process.env.NEXT_PUBLIC_WEBSITE_URL+`/products/${pId}`;
-  const title = "WEBSITE_NAME";
+  const title = process.env.NEXT_PUBLIC_WEBSITE_NAME_FOR_TITLE;
 
   const copyToClipBoard = (e: any) => {
     e.stopPropagation();

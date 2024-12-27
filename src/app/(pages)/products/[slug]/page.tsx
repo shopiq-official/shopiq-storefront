@@ -15,34 +15,42 @@ import { Suspense } from "react";
 import ProductControls from "@/components/productDetail/productControls";
 import RecommendedProducts from "@/components/productDetail/recommendedProducts";
 import ShareSection from "@/components/productDetail/shareSection";
-
-
+import { Discount, epcProp, Product, variantProp } from "@/types";
 
 // Function to generate static parameters for product pages
 
 export async function generateStaticParams() {
   const products = await getAllProducts();
 
-  return products.map((product: any) => ({
-    slug: product.seListing.routeHandle,
+  return products.map((product: Product) => ({
+    slug: product?.seListing?.routeHandle,
   }));
 }
 
 // Main Page component for displaying product details
 
-export default async function Page({ params }: any) {
+export default async function Page({
+  params,
+}: {
+  params: Record<string, string>;
+}) {
   const { slug } = params;
 
-  let data: any = await getProductBySlug(slug);
+  let response = (await getProductBySlug(slug)) as unknown as {
+    status?: "success";
+    product?: Product[];
+  };
 
-  data = data?.product[0];
+  let data: Product | undefined = response?.product
+    ? response.product[0]
+    : undefined;
+  // console.log(data);
   // Fetch discounts data
-  let discounts: any = await getDiscountsApi();
-  discounts = discounts.discounts;
+  let discountsResponse = (await getDiscountsApi()) as unknown as {
+    discounts: Discount;
+  };
 
-  // Check if the product is out of stock
-  const isOutOfStock =
-    data.inventory.currentQuantity == 0 && data.inventory.sellOutstock == false;
+  let discounts: Discount = discountsResponse?.discounts;
 
   return (
     <>
@@ -54,15 +62,13 @@ export default async function Page({ params }: any) {
                 aria-label="product category"
                 href={"/products?category=" + data?.category}
               >
-                <span>{capitalize(data?.category)}</span>
+                <span>{capitalize(data?.category ?? "")}</span>
               </Link>
               <h1>{data?.title}</h1>
             </div>
             {/* Display product images  with carousels and magnification*/}
             <ProductImages
-              data={data?.mediaUrl?.map(
-                (val: any) => `${process.env.NEXT_PUBLIC_IMAGE}${val}`
-              )}
+              data={data?.mediaUrl?.map((val: string) => `${val}`)}
               similar={data}
             />
           </div>
@@ -75,14 +81,14 @@ export default async function Page({ params }: any) {
                     aria-label="product type"
                     href={"/products?productType=" + data?.productType}
                   >
-                    <span>{capitalize(data?.productType)}</span>
+                    <span>{capitalize(data?.productType ?? "")}</span>
                   </Link>{" "}
                   <p style={{ color: "var(--secondary)" }}>/</p>
                   <Link
                     aria-label="product category"
                     href={"/products?category=" + data?.category}
                   >
-                    <span>{capitalize(data?.category)}</span>
+                    <span>{capitalize(data?.category ?? "")}</span>
                   </Link>
                 </div>
                 <ShareSection />
@@ -93,40 +99,45 @@ export default async function Page({ params }: any) {
               <div className={styles.specification}>
                 <h3>specification</h3>
                 <ul>
-                  {data?.specifications?.map((val: any, index: any) => {
-                    return (
-                      <li key={index}>
-                        <span>{capitalize(val?.options_name)} : </span>
-                        <span>
-                          {val?.options_value?.length === 1
-                            ? capitalize(val.options_value[0])
-                            : val.options_value.join(", ")}
-                        </span>
-                      </li>
-                    );
-                  })}
-                  <li>County of Origin : {data.countryOfOrigin}</li>
+                  {data?.specifications?.map(
+                    (
+                      val: Pick<
+                        variantProp,
+                        "options_name" | "options_value"
+                      > & { isVisible?: boolean },
+                      index: number
+                    ) => {
+                      return (
+                        <li key={index}>
+                          <span>{capitalize(val?.options_name ?? "")} : </span>
+                          <span>
+                            {val?.options_value?.length === 1
+                              ? capitalize(val.options_value[0])
+                              : val?.options_value?.join(", ")}
+                          </span>
+                        </li>
+                      );
+                    }
+                  )}
+                  <li>County of Origin : {data?.countryOfOrigin}</li>
                 </ul>
               </div>
             )}
             <Suspense fallback={<p>Loading....</p>}>
-              <ProductControls
-                data={data}
-                isOutOfStock={isOutOfStock}
-                discounts={discounts}
-              />
+              <ProductControls data={data} discounts={discounts} />
             </Suspense>
           </div>
         </div>
 
         <div className={styles.main_epc_parent}>
-          {data.epc.length > 0 &&
-            data.epc.map((val: any, index: any) => {
+          {data?.epc &&
+            data?.epc?.length > 0 &&
+            data.epc.map((val: epcProp, index: number) => {
               return (
                 <div className={styles.epc_container} key={index}>
                   <div>
                     <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE + val.mediaUrl}
+                      src={val?.mediaUrl ?? ""}
                       height={2000}
                       width={2000}
                       alt=".."
@@ -136,7 +147,7 @@ export default async function Page({ params }: any) {
                     <h1> {val?.title}</h1>
                     <p
                       dangerouslySetInnerHTML={{
-                        __html: val?.description,
+                        __html: val?.description ?? "",
                       }}
                     ></p>
                   </div>
@@ -146,8 +157,8 @@ export default async function Page({ params }: any) {
         </div>
         {
           <RecommendedProducts
-            category={data.category}
-            productType={data.productType}
+            category={data?.category}
+            productType={data?.productType}
           />
         }
       </div>

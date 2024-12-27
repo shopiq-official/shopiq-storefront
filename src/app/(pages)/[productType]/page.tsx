@@ -3,11 +3,17 @@ import { Filter } from "@/components/products/filter";
 import { Suspense } from "react";
 import ProductsList from "@/components/products/productsList";
 import { FilterMobile } from "@/components/products/filterMobile";
-import { getCategories, getCategoriesOfType, getCollections, getFilterData } from "@/api";
+import {
+  getCategories,
+  getCategoriesOfType,
+  getCollections,
+  getFilterData,
+} from "@/api";
 import Image from "next/image";
+import { Category, Collection, filterDataProps } from "@/types";
 
 export async function generateStaticParams() {
-  const categories: any = await getCategoriesOfType();
+  const categories: Record<string, string[]> = await getCategoriesOfType();
 
   let all_values = [];
   const p_types = Object.keys(categories).filter((val) => val);
@@ -24,15 +30,15 @@ export async function generateStaticParams() {
     }
   }
 
-  const temp = p_types.map((product: any) => ({
+  const temp = p_types.map((product: string) => ({
     productType: `${product}`,
   }));
 
-  const cats = await getCategories();
+  const cats: Category[] = await getCategories();
 
   console.log(cats);
 
-  cats.forEach((v: any) => {
+  cats.forEach((v: Category) => {
     temp.push({ productType: `${v.title}` });
   });
 
@@ -43,14 +49,20 @@ export async function generateStaticParams() {
   return temp;
 }
 
-const Page = async ({ searchParams, params }: any) => {
+const Page = async ({
+  searchParams,
+  params,
+}: {
+  searchParams: Record<string, string | number | boolean>;
+  params: Record<string, string>;
+}) => {
   // Fetch categories and filter data
-  const category = await getCategories();
-  const filterData = await getFilterData();
-  const collection = await getCollections();
+  const category: Category[] = await getCategories();
+  const filterData: filterDataProps = await getFilterData();
+  const collection: Collection[] = await getCollections();
   let type = "";
 
-  console.log(params.productType);
+  console.log(filterData);
 
   // Determine the type based on productType or category if its other than that make it boolean.
   if (
@@ -61,24 +73,32 @@ const Page = async ({ searchParams, params }: any) => {
     type = "boolean";
   } else {
     type =
-      category.filter((v: any) => v.title === params.productType).length === 0
+      category.filter((v: Category) => v.title === params.productType)
+        .length === 0
         ? "productType"
         : "category";
   }
 
-  // This function returns the meta data i.e. meta title and meta description of category and collection 
+  // This function returns the meta data i.e. meta title and meta description of category and collection
   const getMetaData = () => {
     const val =
       type == "category"
         ? category.filter(
-            (v: any) => encodeURI(v.title) === params.productType
+            (v: Category) => encodeURI(v.title || "") === params.productType
           )
         : collection.filter(
-            (v: any) => encodeURI(v.title) === params.productType
+            (v: Collection) => encodeURI(v.title ?? "") === params.productType
           );
 
     return val[0]?.metaData || {}; // Return the meta data or an empty object
   };
+
+  const selectedCategory = category.find(
+    (v: Category) =>
+      v?.title && v.title.toLowerCase().trim() === searchParams.category
+  );
+
+  const mediaUrl = selectedCategory?.media?.[0]?.mediaUrl;
 
   return (
     <div>
@@ -123,22 +143,11 @@ const Page = async ({ searchParams, params }: any) => {
                 />
               </div>
             ) : (
-              // Render for single category
               <>
-                {category.find(
-                  (v: any) =>
-                    v.title.toLowerCase().trim() === searchParams.category
-                )?.media[0]?.mediaUrl && (
+                {
                   <div className={styles.banner}>
                     <Image
-                      src={
-                        process.env.NEXT_PUBLIC_IMAGE +
-                        category.find(
-                          (v: any) =>
-                            v.title.toLowerCase().trim() ===
-                            searchParams.category
-                        ).media[0].mediaUrl
-                      }
+                      src={mediaUrl || ""}
                       width={1000}
                       height={400}
                       alt=""
@@ -149,7 +158,7 @@ const Page = async ({ searchParams, params }: any) => {
                       }}
                     />
                   </div>
-                )}
+                }
                 <div className={styles.simple_hero}>
                   <h1>{searchParams.category}</h1>
                   <FilterMobile

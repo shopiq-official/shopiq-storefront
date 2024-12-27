@@ -23,7 +23,7 @@ const Banners = ({ data }: any) => {
 
   return (
     <div className={styles.nav_first_row}>
-      <div className={styles.embla__viewport} ref={emblaRef}>
+      <div className={styles.embla_viewport} ref={emblaRef}>
         <div className={styles.embla__container}>
           {data.map((val: any, index: number) => (
             <div className={styles.embla__slide} key={index}>

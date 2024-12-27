@@ -12,7 +12,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "business-1-images.s3.ap-south-1.amazonaws.com",
+        hostname: "business-one-1.s3.ap-south-1.amazonaws.com",
         port: "",
       },
       {

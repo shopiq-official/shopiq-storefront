@@ -8,6 +8,7 @@ import {
 } from "@/api";
 import { getCurrentDate } from "@/lib/getCurrentDate";
 import { isInCart } from "@/lib/isInCart";
+import { Cart, CartProduct, Product } from "@/types";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
@@ -71,7 +72,9 @@ export const deleteCartItem = createAsyncThunk(
       await deleteCartItemFromServer(id);
 
       // Fetch updated cart from the server
-      const cart_data: any = await fetchCartFromServer();
+      const cart_data = (await fetchCartFromServer()) as unknown as {
+        cart: Cart[];
+      };
 
       return {
         cardId: cart_data.cart[0]._id,
@@ -148,7 +151,7 @@ export const addToCart = createAsyncThunk(
       if (isInCart(state.cart, { _id: productId }, variants, quantity)) {
         res = await updateCartApi({
           products: state.cart.cart
-            .map((val: any) => ({
+            .map((val: CartProduct) => ({
               productId: val.productId._id,
               mediaUrl: data.mediaUrl[0],
               quantity: val.quantity,
@@ -159,7 +162,7 @@ export const addToCart = createAsyncThunk(
 
               let cart_v_object: any = {};
 
-              cart_v.forEach((single_v: any) => {
+              cart_v?.forEach((single_v: any) => {
                 cart_v_object[single_v.options_name] = Array.isArray(
                   single_v.options_value
                 )
@@ -171,7 +174,7 @@ export const addToCart = createAsyncThunk(
                 Object.keys(cart_v_object).length === 0 &&
                 Object.keys(variants).length === 0
               ) {
-                return { ...val, quantity: val.quantity + quantity };
+                return { ...val, quantity: val?.quantity + quantity };
               } else {
                 const obj_array = Object.keys(cart_v_object);
                 for (let i = 0; i < obj_array.length; i++) {
@@ -179,7 +182,7 @@ export const addToCart = createAsyncThunk(
                     return val;
                   }
                 }
-                return { ...val, quantity: val.quantity + quantity };
+                return { ...val, quantity: val?.quantity + quantity };
               }
             }),
         });
@@ -204,11 +207,13 @@ export const addToCart = createAsyncThunk(
         });
       }
 
-      const cartData: any = await fetchCartFromServer();
+      const cartData = (await fetchCartFromServer()) as unknown as {
+        cart: Cart[];
+      };
 
       return { cardId: cartData.cart[0]._id, cart: cartData.cart[0].products };
     } else {
-      let temp_cart: any = [...(state.cart.cart || [])];
+      let temp_cart: Cart[] | [] = [...(state.cart.cart || [])];
 
       if (isInCart(state.cart, { _id: productId }, variants, quantity)) {
         temp_cart = temp_cart.map((val: any) => {
@@ -235,7 +240,7 @@ export const addToCart = createAsyncThunk(
           }
         });
       } else {
-        const temp_cart_data = {
+        const temp_cart_data: any = {
           productId: { ...data, _id: productId },
           mediaUrl: data.mediaUrl[0],
           quantity: quantity,
@@ -269,7 +274,7 @@ export const updateCart = createAsyncThunk(
     if (!isLoggedIn) {
       // If user is not logged in, update cart in localStorage
 
-      let temp_cart: any = [...(state.cart.cart || [])];
+      let temp_cart: CartProduct[] | [] = [...(state.cart.cart || [])];
 
       let updatedItem = { ...temp_cart[index] };
 
@@ -302,13 +307,13 @@ export const updateCart = createAsyncThunk(
           .promise(
             updateCartApi({
               products: state.cart.cart
-                .map((val: any) => ({
+                .map((val: CartProduct) => ({
                   productId: val.productId._id,
                   mediaUrl: val.mediaUrl,
                   quantity: val.quantity,
                   variant: val.variant,
                 }))
-                .map((val: any, l_index: number) => {
+                .map((val: CartProduct, l_index: number) => {
                   if (l_index === index) {
                     return {
                       ...val,
@@ -317,7 +322,7 @@ export const updateCart = createAsyncThunk(
                   }
                   return val;
                 })
-                .filter((val: any) => {
+                .filter((val: CartProduct) => {
                   return val.quantity >= 1;
                 }),
             }),
@@ -331,7 +336,7 @@ export const updateCart = createAsyncThunk(
             dispatch(getCart()); // Refresh cart after update
             resolve(res);
           })
-          .catch((err: any) => {
+          .catch((err: Error) => {
             toast.error("Error while updating quantity.");
             reject(err);
           });

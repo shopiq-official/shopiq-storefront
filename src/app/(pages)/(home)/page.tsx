@@ -4,6 +4,7 @@ import {
   getByProductType,
   getCategories,
   getContent,
+  getDiscountsApi,
   getFeatured,
   getNewLaunch,
 } from "@/api";
@@ -13,10 +14,9 @@ import { Suspense } from "react";
 import FullWidthCarousel from "@/common/carousels/FullWidthCarousel/fullWidthCarousel";
 import dynamic from "next/dynamic";
 import DealsSection from "@/components/Homepage/dealsSection";
-// import CarouselWithTabs from "@/components/Homepage/carouselWithTabs";
-// import HomeContentOne from "@/components/Homepage/homeContentOne";
-// import HomeContentTwo from "@/components/Homepage/homeContentTwo";
-// import StatsSection from "@/components/Homepage/statsSection";
+
+import CategorySection from "@/components/Homepage/category/categorySection";
+import { Content, Product } from "@/types";
 
 const CarouselWithTabs = dynamic(
   () => import("@/components/Homepage/carouselWithTabs"),
@@ -33,40 +33,17 @@ const HomeContentTwo = dynamic(
   { loading: () => <p>Loading Home Content Two....</p> }
 );
 
-const StatsSection = dynamic(
-  () => import("@/components/Homepage/statsSection"),
-  { loading: () => <p>Loading Stats Section....</p> }
-);
-
 const getHomeData = async () => {
-  const contents: any = await getContent();
-  const newLaunch: any = await getNewLaunch();
-  const bestSeller: any = await getBestSeller();
-  const featured: any = await getFeatured();
-  const her: any = await getByProductType("her");
-  const him: any = await getByProductType("him");
-  const pride: any = await getByProductType("pride");
-  const tshirts: any = await getByProductCategory("t-shirts");
-  const hoodies: any = await getByProductCategory("hoodies");
-  const dresses: any = await getByProductCategory("dresses");
-  const yogaPants: any = await getByProductCategory("yoga pants");
-  const shorts: any = await getByProductCategory("shorts");
-  const toteBags: any = await getByProductCategory("tote bags");
+  const contents = (await getContent()) as unknown as { contents: Content[] };
+  const newLaunch = (await getNewLaunch()) as unknown as { data: Product[] };
+  const bestSeller = (await getBestSeller()) as unknown as { data: Product[] };
+  const featured = (await getFeatured()) as unknown as { data: Product[] };
 
   return {
-    contents: contents.contents[0],
+    contents: contents.contents?.length ? contents.contents[0] : null,
     newLaunch: newLaunch?.data,
     bestSeller: bestSeller?.data,
     featured: featured?.data,
-    her: her?.data,
-    him: him?.data,
-    pride: pride?.data,
-    tshirts: tshirts?.data,
-    hoodies: hoodies?.data,
-    dresses: dresses?.data,
-    yogaPants: yogaPants?.data,
-    shorts: shorts?.data,
-    toteBags: toteBags?.data,
   };
 };
 
@@ -74,94 +51,36 @@ const Page = async () => {
   const data = await getHomeData();
 
   return (
-    <div>
-       {/* main carousel  */}
-      <FullWidthCarousel data={data.contents?.hero} />
+    <div style={{ display: "flex", flexDirection: "column", gap: "5vh" }}>
+      {data?.contents && data?.contents?.hero?.length && (
+        <FullWidthCarousel data={data.contents?.hero} />
+      )}
 
-      
-       {/* product video section  */}
-      <DealsSection />
+      <CategorySection />
+      <div>
+        {data?.featured?.length > 0 && (
+          <CarouselWithTabs
+            title="Top picks for your pet!"
+            description={"Lorem ipsum doror samet"}
+            data={data?.featured}
+            link={"/products?isFeatured=true"}
+          />
+        )}
+        {data?.contents && <HomeContentOne />}
 
-      
-      {/* this is for showing products with tabs at the top to swith between different category */}
-      <CarouselWithTabs
-        data={[
-          {
-            text: "New Launch",
-            value: "new-launch",
-            list: data?.newLaunch,
-          },
-          {
-            text: "Best Seller",
-            value: "best-seller",
-            list: data?.bestSeller,
-          },
-          { text: "Featured", value: "featured", list: data?.featured },
-        ]}
-        selected="new-launch"
-      />
- {/* Banner 1 */}
-      <HomeContentOne />
+        <DealsSection />
 
-      <CarouselWithTabs
-        data={[
-          {
-            text: "Her",
-            value: "her",
-            list: data?.her,
-          },
-          {
-            text: "Him",
-            value: "him",
-            list: data?.him,
-          },
-          { text: "Pride", value: "pride", list: data?.pride },
-        ]}
-        selected="her"
-      />
-{/* Banner 2 */}
-      <HomeContentTwo />
-      
-      <CarouselWithTabs
-        data={[
-          {
-            text: "T-shirts",
-            value: "t-shirts",
-            list: data?.tshirts,
-          },
-          {
-            text: "Hoodies",
-            value: "hoodies",
-            list: data?.hoodies,
-          },
-          { text: "Dresses", value: "dresses", list: data?.dresses },
-        ]}
-        selected="t-shirts"
-        type="category"
-      />
-    
-       {/* Static section  */}
-      <StatsSection />
-    
-      
-      <CarouselWithTabs
-        data={[
-          {
-            text: "Yoga Pants",
-            value: "yoga pants",
-            list: data?.yogaPants,
-          },
-          {
-            text: "Shorts",
-            value: "shorts",
-            list: data?.shorts,
-          },
-          { text: "Tote Bags", value: "tote bags", list: data?.toteBags },
-        ]}
-        selected="yoga pants"
-        type="category"
-      />
-     
+        {data?.bestSeller?.length > 0 && (
+          <CarouselWithTabs
+            title="Pets love these picks! "
+            description={"Lorem ipsum doror samet"}
+            data={data?.bestSeller}
+            link={"/products?bestSeller=true"}
+          />
+        )}
+
+        {data?.contents && <HomeContentTwo />}
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-const PrevButton = (props: any) => {
+const PrevButton = (props: Record<string, any>) => {
   const { children, ...restProps } = props;
 
   return (

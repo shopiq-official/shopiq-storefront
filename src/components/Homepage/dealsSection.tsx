@@ -7,10 +7,12 @@ const DealsSection = async () => {
 
   console.log(res.productMedias);
 
+  if (res.productMedias?.length === 0) return <></>;
+
   return (
     <div className={styles.container}>
       <div className={styles.videos}>
-        <ClientDealSectionPart data={[...res.productMedias]} />
+        {/* <ClientDealSectionPart data={[...res?.productMedias]} /> */}
       </div>
     </div>
   );

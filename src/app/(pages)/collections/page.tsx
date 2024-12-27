@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getCollections } from "@/api";
 import { capitalize } from "@/lib/capitalize";
+import { Collection } from "@/types";
 
 async function Collections() {
   const collections = await getCollections();
@@ -14,7 +15,7 @@ async function Collections() {
       <div className={styles.main_container}>
         <h1>Collections</h1>
         <div className={styles.collection_cards}>
-          {collections.map((val: any, ind: any) => {
+          {collections.map((val: Collection, ind: number) => {
             return (
               <>
                 <Link
@@ -23,14 +24,12 @@ async function Collections() {
                   aria-label="products collections"
                 >
                   <Image
-                    src={
-                      process.env.NEXT_PUBLIC_IMAGE + val?.media[0]?.mediaUrl
-                    }
+                    src={val?.media[0]?.mediaUrl}
                     alt="..."
                     height={1500}
                     width={1500}
                   />
-                  <h3>{capitalize(val?.title)}</h3>
+                  <h3>{capitalize(val?.title ?? "")}</h3>
                 </Link>
               </>
             );

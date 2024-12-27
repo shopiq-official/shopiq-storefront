@@ -10,7 +10,8 @@ import { calcPrice, calculateAdvancePricing } from "@/lib/calcPrice";
 import { useSelector } from "react-redux";
 import CartProductList from "./cartProductList";
 import { getDiscountsApi, handlePaymentApi, placeOrder } from "@/api";
-import { useKeyContext } from "@/providers/keyProvider";
+import { keyContextProps, useKeyContext } from "@/providers/keyProvider";
+import { CartProduct, CartProductVariant, Discount, variantProp } from "@/types";
 
 type Props = {
   open: boolean;
@@ -20,12 +21,9 @@ type Props = {
 let current_order = "";
 
 const Cart = (props: Props) => {
-const {
-  key,
-  isShippingChargeActive,
-  shippingCharge,
-}: any = useKeyContext();
-  const [discounts, setDiscounts] = useState([]);
+  const { key, isShippingChargeActive, shippingCharge }: keyContextProps =
+    useKeyContext();
+  const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -42,34 +40,42 @@ const {
       return 0;
     }
 
-    const totalPrice = cart.reduce((accumulator: any, currentValue: any) => {
-      if (currentValue?.productId?.advancePricing) {
-         let temp: any = {};
-         currentValue?.variant?.forEach((val: any) => {
-           temp[val.options_name] = val.options_value;
-         });
-        const actualPrice = calculateAdvancePricing(currentValue.productId, temp);
-        const subtotal = actualPrice * currentValue.quantity;
-        return accumulator+ subtotal
-      }
-      else {
-        
-        const price = currentValue.productId.pricing.price;
-  
-        const subtotal = price * currentValue.quantity;
-  
-        return accumulator + subtotal;
-      }
-    }, 0);
+    const totalPrice = cart.reduce(
+      (accumulator: number, currentValue: CartProduct) => {
+        if (currentValue?.productId?.advancePricing) {
+          let temp: Record<string, string[]> = {};
+          currentValue?.variant?.forEach((val: variantProp) => {
+            if (typeof val?.options_name == "string" && val.options_value) {
+              temp[val.options_name] = val.options_value;
+            }
+          });
+          const actualPrice = calculateAdvancePricing(
+            currentValue.productId,
+            temp
+          );
+          const subtotal = actualPrice * currentValue.quantity;
+          return accumulator + subtotal;
+        } else {
+          const price = currentValue?.productId?.pricing?.price;
+
+          const subtotal = (price ?? 0) * currentValue.quantity;
+
+          return accumulator + subtotal;
+        }
+      },
+      0
+    );
 
     return totalPrice;
   };
 
   const getDiscounts = async () => {
     try {
-      const res: any = await getDiscountsApi();
+      const res = (await getDiscountsApi()) as unknown as {
+        discounts: Discount[];
+      };
 
-      setDiscounts(res.discounts);
+      setDiscounts(res?.discounts);
     } catch (e) {
       setDiscounts([]);
     }
@@ -80,18 +86,18 @@ const {
     let total = 0;
     let igst = 0;
 
-    cart.forEach((p: any) => {
+    cart.forEach((p: CartProduct) => {
       const data = p.productId;
 
-      let sub_total: any = data?.advancePricing
+      let sub_total: number = data?.advancePricing
         ? calcPrice(data?.advancePricingValues)
-        : data.pricing.price;
-      igst = data.pricing.igst;
+        : data?.pricing?.price;
+      igst = Number(data?.pricing?.igst);
       total += sub_total * p.quantity;
     });
 
     const common_payload = {
-      products: cart.map((val: any) => ({
+      products: cart.map((val: CartProduct) => ({
         productId: val.productId?._id,
         quantity: val.quantity,
         variant: val.variant,
@@ -110,13 +116,13 @@ const {
         setLoading(false);
 
         window.Retaino.CheckoutRetaino(
-          cart?.map((val: any) => ({
+          cart?.map((val: CartProduct) => ({
             productId: val.productId?._id,
             title: val.productId?.title,
-            price: val.productId?.pricing.price,
+            price: val?.productId?.pricing?.price,
             quantity: val.quantity,
-            image: process.env.NEXT_PUBLIC_IMAGE + val.mediaUrl,
-            variants: val.variant.map((vall: any) => {
+            image: val.mediaUrl,
+            variants: val?.variant?.map((vall:CartProductVariant) => {
               return { key: vall.options_name, value: vall.options_value };
             }),
             category: val?.productId?.category,
@@ -139,7 +145,7 @@ const {
   };
 
   const handlePayment = (res: any) => {
-    const data: any = {
+    const data:Record<string,string | boolean | unknown[]> = {
       customerId: res.userId,
       modeOfPayment: res.payment_type === "cod" ? "cod" : "pg",
       paymentStatus: res.payment_type === "cod" ? "unpaid" : "paid",
@@ -160,9 +166,10 @@ const {
           router.push("/account");
         });
       })
-      .catch((err: any) => {});
+      .catch((err: Error) => {
+        console.log(err)
+      });
   };
-
 
   return (
     <>
@@ -185,7 +192,7 @@ const {
               style={{ overflowY: "auto" }}
               // key={index}
             >
-              {cart?.map((item: any, index: any) => {
+              {cart?.map((item: CartProduct, index: number) => {
                 return (
                   <>
                     <CartProductList item={item} index={index} />

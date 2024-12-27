@@ -1,8 +1,9 @@
+import { Collection, Contact } from "@/types";
 import axios from "axios";
 
 const identifier = process.env.NEXT_PUBLIC_IDENTIFIER;
 // const baseUrl = "http://localhost:8080/api/";
-const baseUrl = "https://backend.cftcommerce.com/api/";
+const baseUrl = "https://api.shopiq.app/api/";
 
 type Props = {
   url: string;
@@ -12,8 +13,15 @@ type Props = {
   bearer?: boolean;
 };
 
+type ObjProp = {
+  url: string;
+  method: string;
+  data?: any;
+  headers?: any;
+};
+
 const api = (props: Props) => {
-  const obj: any = {
+  const obj: ObjProp = {
     url: baseUrl + props.url,
     method: props.method,
     data: props.data,
@@ -34,19 +42,19 @@ const api = (props: Props) => {
 
 export const getCollections = async () => {
   try {
-    let res: any = await fetch(
+    let res = await fetch(
       `${baseUrl}productcollection/?identifier=${identifier}`,
       { next: { tags: ["collection"] } }
     );
-    res = await res.json();
-    return res.productCollections;
+    const data = await res.json();
+    return data?.productCollections;
   } catch (err) {
     return [];
   }
 };
 
 export const getCategoriesOfType = async () => {
-  let response: any = await fetch(
+  let response = await fetch(
     `${baseUrl}products/getUniqueCategories?identifier=${identifier}`,
     { next: { tags: ["products", "category"] } }
   );
@@ -133,27 +141,27 @@ export const getByProductCategory = async (category: string) => {
 
 export const getCategories = async () => {
   try {
-    let res: any = await fetch(
+    let res = await fetch(
       `${baseUrl}productcategory/?identifier=${identifier}`,
       { next: { tags: ["category"] } }
     );
-    res = await res.json();
-    return res.productCategorys;
+    let data = await res.json();
+    return data.productCategories;
   } catch (err) {
     return [];
   }
 };
 
-export const searchProducts = async (search: any) => {
-  let res: any = await fetch(
+export const searchProducts = async (search: string) => {
+  let res = await fetch(
     `${baseUrl}products/search/${identifier}?text=${search}&isVariant=false`
   );
   res = await res.json();
   return res;
 };
 
-export const getProductByFilter = async (search: any) => {
-  let res: any = await fetch(
+export const getProductByFilter = async (search: string) => {
+  let res = await fetch(
     `${baseUrl}products/filterNew?isVariant=false&identifier=${identifier}&${search}`
   );
 
@@ -163,7 +171,7 @@ export const getProductByFilter = async (search: any) => {
 };
 
 export const getFilterData = async () => {
-  let res: any = await fetch(
+  let res = await fetch(
     `${baseUrl}products/filterData?identifier=${identifier}`
   );
 
@@ -173,7 +181,7 @@ export const getFilterData = async () => {
 };
 
 export const getKey = async () => {
-  let res: any = await fetch(`${baseUrl}users/verifyuser`, {
+  let res = await fetch(`${baseUrl}users/verifyuser`, {
     method: "post",
     body: JSON.stringify({ identifier, content: true }),
     headers: {
@@ -184,8 +192,8 @@ export const getKey = async () => {
   return res;
 };
 
-export const submitContact = async (body: any) => {
-  let res: any = await fetch(`${baseUrl}contacts`, {
+export const submitContact = async (body: Contact) => {
+  let res = await fetch(`${baseUrl}contacts`, {
     method: "post",
     body: JSON.stringify(body),
     headers: {
@@ -193,19 +201,19 @@ export const submitContact = async (body: any) => {
     },
   });
 
-  res = res.json();
+  let data = res.json();
 
-  return res;
+  return data;
 };
 
 export const getAllStores = async () => {
   try {
-    let res: any = await fetch(
+    let res = await fetch(
       `${baseUrl}admins/getAllStores/?identifier=${identifier}`,
       { next: { tags: ["stores"] } }
     );
-    res = await res.json();
-    return res.data[0];
+    let data = await res.json();
+    return data?.data[0];
   } catch (err) {
     return {};
   }
@@ -221,7 +229,7 @@ export const getCartFromServer = async () => {
   return res;
 };
 
-export const deleteCartItemFromServer = async (id: any) => {
+export const deleteCartItemFromServer = async (id: string) => {
   let res = await axios({
     method: "PATCH",
     url: `${baseUrl}carts/removeCartItem`,
@@ -231,12 +239,11 @@ export const deleteCartItemFromServer = async (id: any) => {
       productId: id,
     },
   });
- 
 
   return res;
 };
 
-export const deleteCartFromServer = async (id: any) => {
+export const deleteCartFromServer = async (id: string) => {
   let res = await fetch(`${baseUrl}carts/${id}`, { method: "delete" });
   res = await res.json();
   return res;
@@ -311,16 +318,16 @@ export const getAllProductMedia = async () => {
 };
 
 export const getAllProducts = async () => {
-  let res: any = await fetch(
+  let res = await fetch(
     `${baseUrl}products/filterNew?isVariant=false&identifier=${identifier}&limit=10000&page=1`
   );
 
-  res = await res.json();
+  let data = await res.json();
 
-  return res?.data || [];
+  return data?.data || [];
 };
 
-export const getProductBySlug = async (slug: any) => {
+export const getProductBySlug = async (slug: string) => {
   let res = await fetch(`${baseUrl}products/${identifier}/${slug}`, {
     next: { tags: ["products"] },
   });
@@ -365,7 +372,7 @@ export const placeOrder = async (data: any) => {
 export const handlePaymentApi = async (
   data: any,
   current_order: any,
-  token: any
+  token: string
 ) => {
   let res = await axios({
     url: `${baseUrl}orders/product/user/${current_order}`,

@@ -1,7 +1,7 @@
 "use client";
 import { convertParamsIntoBrowserQuery } from "@/lib/convertParamsIntoBrowserQuery";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import DropIcon from "@/assets/Icons/dropDown.svg";
 
 import styles from "./filter.module.css";
@@ -11,22 +11,33 @@ export const FilterSection = ({
   data,
   value = "",
   params,
-  type = "",
-}: any) => {
+  type,
+}: {
+  title: string;
+  data: string[];
+  value: string;
+  params: Record<string, any>;
+  type?: string;
+}) => {
+  type ListProp = {
+    title: string;
+    value: boolean;
+  };
+
   const [open, setOpen] = useState(true);
   const router = useRouter();
-  const [list, setList]: any = useState([]);
+  const [list, setList] = useState<ListProp[]>([]);
 
   useEffect(() => {
-    const temp: any = [];
+    const temp: ListProp[] = [];
 
-    data.forEach((v: any) => {
+    data.forEach((v: string) => {
       temp.push({ title: v, value: checkedValue(v) });
     });
     setList([...temp]);
   }, [params[value]]);
 
-  const handleChange = (e: any, v: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, v: string) => {
     let temp_params = params;
 
     if (params[value]) {
@@ -58,7 +69,7 @@ export const FilterSection = ({
     }
   };
 
-  const checkedValue = (v: any) => {
+  const checkedValue = (v: string) => {
     if (params[value]) {
       if (Array.isArray(params[value])) {
         return params[value].indexOf(v) !== -1;
@@ -82,11 +93,13 @@ export const FilterSection = ({
       <ul
         className={`${styles.section_body} ${open && styles.section_body_open}`}
       >
-        {list.map((v: any, i: any) => {
+        {list.map((v: ListProp, i: number) => {
           return (
             <li key={i}>
               <input
-                onChange={(e: any) => handleChange(e, v.title)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, v.title)
+                }
                 type="checkbox"
                 id={`${v}:${i}`}
                 checked={v.value}
@@ -105,7 +118,15 @@ export const FilterSection = ({
   );
 };
 
-export const FilterSectionPrice = ({ title, data, params }: any) => {
+export const FilterSectionPrice = ({
+  title,
+  data,
+  params,
+}: {
+  title: string;
+  data: { maxPrice: number; minPrice: number };
+  params: Record<string, string>;
+}) => {
   const [open, setOpen] = useState(true);
   const router = useRouter();
   const [current, setCurrent] = useState(params?.price || "");
@@ -114,8 +135,8 @@ export const FilterSectionPrice = ({ title, data, params }: any) => {
     setCurrent(params?.price || "");
   }, [params?.price]);
 
-  const handleChange = (e: any) => {
-    let temp_params: any = params;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let temp_params: Record<string, string> = params;
 
     if (params?.price) {
       if (params?.price === e.target.id) {

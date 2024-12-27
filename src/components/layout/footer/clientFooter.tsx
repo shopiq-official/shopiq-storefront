@@ -20,7 +20,8 @@ export const ClientFooter = ({ categories, store }: any) => {
 
       <div className={styles.bottom_stripp}>
         <div>
-          Copyright © WEBSITE_NAME 2024 All rights reserved | Powered by{" "}
+          Copyright © {process.env.NEXT_PUBLIC_WEBSITE_NAME_FOR_TITLE} 2024 All
+          rights reserved | Powered by{" "}
           <a
             href={`https://www.shopiq.app/?utm_source=${website}&utm_medium=footer&utm_campaign=clientclick`}
             target="_blank"

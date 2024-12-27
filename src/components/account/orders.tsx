@@ -9,13 +9,14 @@ import { checkProductStatus } from "@/lib/checkProductStatus";
 import { capitalize } from "@/lib/capitalize";
 import { formatDate } from "@/lib/formateDate";
 import ConfirmCancel from "../confirmCancel/confirmCancel";
+import { Order, Product } from "@/types";
 
 const Orders = () => {
   // State variables for managing order data and loading states
   const [cancelLoader, setCancelLoader] = useState<boolean>(false);
   const [confirmCancel, setConfirmCancel] = useState<boolean>(false);
-  const [productid, setproductId] = useState<any>();
-  const [data, setData] = useState([]);
+  const [productid, setproductId] = useState<Order>();
+  const [data, setData] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Destructure values from checkProductStatus based on productid
@@ -29,7 +30,7 @@ const Orders = () => {
   const getOrder = () => {
     // Fetch orders from the API
     axios({
-      url: `https://backend.cftcommerce.com/api/orders/getordersbyuserid?userId=${window?.Retaino?.getUserId()}&identifier=${
+      url: `https://api.shopiq.app/api/orders/getordersbyuserid?userId=${window?.Retaino?.getUserId()}&identifier=${
         process.env.NEXT_PUBLIC_IDENTIFIER
       }`,
       method: "GET",
@@ -46,7 +47,7 @@ const Orders = () => {
   let count = 0;
 
   // Count the number of orders with a status
-  data?.forEach((element: any) => {
+  data?.forEach((element: Order) => {
     if (element.orderStatus) {
       count++;
     }
@@ -78,7 +79,9 @@ const Orders = () => {
     // Function to update the order status
     return new Promise((resolve, reject) => {
       axios({
-        url: `https://backend.cftcommerce.com/api/orders/product/user/${productid._id}`,
+        url: `https://api.shopiq.app/api/orders/product/user/${
+          productid?._id || ""
+        }`,
         method: "PATCH",
         data: checkProductStatus(productid).payload,
         headers: {
@@ -87,13 +90,13 @@ const Orders = () => {
           )}`,
         },
       })
-        .then((res: any) => {
+        .then((res) => {
           resolve(true); // Resolve promise on success
           getOrder(); // Refresh orders
           toast.success(toastvalue); // Show success toast
           setConfirmCancel(false); // Close confirmation modal
         })
-        .catch((err: any) => {
+        .catch((err: Error) => {
           reject(true); // Reject promise on error
           setConfirmCancel(false); // Close confirmation modal
           toast.error("An Error Occured"); // Show error toast
@@ -101,7 +104,7 @@ const Orders = () => {
     });
   };
 
-  const handelOpenConfirmModal = (product: any) => {
+  const handelOpenConfirmModal = (product: Order) => {
     // Open confirmation modal for canceling an order
     setConfirmCancel(true);
     setproductId(product);
@@ -111,14 +114,14 @@ const Orders = () => {
     <>
       <ul className={styles.orders}>
         {data
-          .filter((value: any) => value.orderStatus === true) // Filter active orders
-          ?.map((val: any, index: any) => {
+          .filter((value: Order) => value.orderStatus === true) // Filter active orders
+          ?.map((val: Order, index: number) => {
             return (
               <li key={index}>
                 <div className={styles.main_head}>
                   <div className={styles.id_and_date}>
                     <h5 className={styles.order_id}> #{val.orderRefId}</h5>
-                    <h4>{formatDate(val?.date)}</h4>
+                    <h4>{formatDate(String(val?.date))}</h4>
                   </div>
                   <div className={styles.price_and_actions}>
                     {val.returnStatus == "requested" ? (
@@ -172,58 +175,58 @@ const Orders = () => {
                   </div>
                 </div>
                 <ul className={styles.order_products}>
-                  {val.products.map((p_data: any, index: any) => {
-                    return (
-                      <li key={index}>
-                        <div className={styles.about_product}>
-                          {/* product image */}
-                          <div className={styles.product_img}>
-                            <Image
-                              src={
-                                process.env.NEXT_PUBLIC_IMAGE +
+                  {val?.products?.map(
+                    (p_data: Record<string, any>, index: number) => {
+                      return (
+                        <li key={index}>
+                          <div className={styles.about_product}>
+                            {/* product image */}
+                            <div className={styles.product_img}>
+                              <Image
+                                src={
                                   p_data?.mediaUrl ||
-                                p_data.productId?.mediaUrl[0]
-                              }
-                              alt="product Image ..."
-                              height={1500}
-                              width={1500}
-                            />
-                          </div>
+                                  p_data.productId?.mediaUrl[0]
+                                }
+                                alt="product Image ..."
+                                height={1500}
+                                width={1500}
+                              />
+                            </div>
 
-                          {/* product details */}
-                          <div className={styles.product_details}>
-                            <span
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <h5> #{val.orderRefId}</h5>
-                              {capitalize(val.products[0].productId?.category)}
-                            </span>
-                            <h3>
-                              {capitalize(val.products[0].productId?.title)}
-                            </h3>
-                            <ul className={styles.variant_details}>
-                              <li>Quantity : {val.products[0].quantity}</li>
-                              <li>
-                                Price : ₹
-                                {val?.products[0].productId?.pricing.price}
-                              </li>
-                              <li>
-                                Payment :{" "}
-                                {val.modeOfPayment === "cod" ? "COD" : "Online"}
-                              </li>
-                              <li>
-                                Order Status :{" "}
-                                {capitalize(val?.fulfilmentStatus)}
-                              </li>
-                            </ul>
+                            {/* product details */}
+                            <div className={styles.product_details}>
+                              <span
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <h5> #{val.orderRefId}</h5>
+                                {capitalize(p_data.productId?.category)}
+                              </span>
+                              <h3>{capitalize(p_data.productId?.title)}</h3>
+                              <ul className={styles.variant_details}>
+                                <li>Quantity : {p_data.quantity}</li>
+                                <li>
+                                  Price : ₹{p_data.productId?.pricing.price}
+                                </li>
+                                <li>
+                                  Payment :{" "}
+                                  {val.modeOfPayment === "cod"
+                                    ? "COD"
+                                    : "Online"}
+                                </li>
+                                <li>
+                                  Order Status :{" "}
+                                  {capitalize(val?.fulfilmentStatus ?? "")}
+                                </li>
+                              </ul>
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                    );
-                  })}
+                        </li>
+                      );
+                    }
+                  )}
                 </ul>
               </li>
             );

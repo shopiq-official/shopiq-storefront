@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import { localToCloud } from "@/redux/cart.slice";
 import toast from "react-hot-toast";
-import { useKeyContext } from "@/providers/keyProvider";
+import { keyContextProps, useKeyContext } from "@/providers/keyProvider";
 import BottomNav from "../bottomNav/bottomNav";
 import MobileMenu from "./mobileMenu";
 import { useUTMData } from "@/hooks/utmData";
@@ -19,13 +19,13 @@ const Search = dynamic(() => import("../search/search"));
 const Cart = dynamic(() => import("../cart/cart"));
 
 export const IconsPart = ({ cat, bs, data }: any) => {
-   useUTMData();
-   const { getUserDeviceDetails } = useUserInfo();
-   getUserDeviceDetails();
+  useUTMData();
+  const { getUserDeviceDetails } = useUserInfo();
+  getUserDeviceDetails();
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const { key }: any = useKeyContext();
+  const { key }: keyContextProps = useKeyContext();
   const [innerWidth, setInnerWidth] = useState(0);
 
   const [search, setSearch] = useState(false);

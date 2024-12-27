@@ -118,7 +118,7 @@ const ClientDealSectionPart = ({ data }: any) => {
           gap: "10px",
         }}
       >
-        {data.map((media: any, index: any) => {
+        {data.map((media: any, index: number) => {
           return (
             <SplideSlide key={index}>
               <div
@@ -155,7 +155,7 @@ const ClientDealSectionPart = ({ data }: any) => {
                 >
                   <source src={media?.productVideoUrl} />
                 </video>
-                <ProductCard products={media.productId} shopBtn={false} /> // Render ProductCard component
+                <ProductCard products={media.productId} shopBtn={false} />
               </div>
             </SplideSlide>
           );
@@ -206,7 +206,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
           pagination: true,
         }}
       >
-        {data.map((product: any, index: any) => {
+        {data.map((product: any, index: number) => {
           return (
             <SplideSlide key={index}>
               <div
@@ -220,8 +220,9 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
                   alignItems: "center",
                   justifyContent: "space-between",
                 }}
-                onClick={() =>
-                  router.push("/products/" + product?.seListing?.routeHandle) // Navigate to product page on click
+                onClick={
+                  () =>
+                    router.push("/products/" + product?.seListing?.routeHandle) // Navigate to product page on click
                 }
               >
                 <div className={pstyles.product_image_and_text_gap}>
@@ -229,7 +230,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
                     width={100}
                     height={100}
                     alt=""
-                    src={process.env.NEXT_PUBLIC_IMAGE + product?.mediaUrl[0]} // Display product image
+                    src={product?.mediaUrl[0]} // Display product image
                   />
 
                   <div style={{ lineHeight: ".9rem" }}>
@@ -240,9 +241,9 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
                         color: "white",
                       }}
                     >
-                      {product.category} // Display product category
+                      {product.category}
                     </span>
-                    <h2 className={pstyles.product_heading}>{product.title}</h2> // Display product title
+                    <h2 className={pstyles.product_heading}>{product.title}</h2>
                   </div>
                 </div>
               </div>

@@ -5,9 +5,9 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "description": " ENTER_DESCRIPTION",
-  "name": "ENTER_NAME",
-  "short_name": "ENTER_SHORT_NAME",
+  "description": "",
+  "name": "",
+  "short_name": "",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

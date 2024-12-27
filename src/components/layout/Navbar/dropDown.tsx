@@ -17,7 +17,7 @@ export const NavDropDown = ({ title, categories }: Props) => {
         {title}
       </Link>
       <span className={styles.list_items}>
-        {categories?.map((val: any, index: any) => {
+        {categories?.map((val: any, index: number) => {
           return (
             <Link
               aria-label="nav drop menu"

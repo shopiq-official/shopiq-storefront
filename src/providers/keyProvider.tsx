@@ -59,3 +59,12 @@ export const KeyContextProvider = ({ children }: any) => {
 export const useKeyContext = () => {
   return useContext(KeyContext);
 };
+
+export type keyContextProps = {
+  key?: string;
+  status?: string;
+  isMinOrderValueActive?: boolean;
+  minOrderValue?: number;
+  isShippingChargeActive?: boolean;
+  shippingCharge?: number;
+};

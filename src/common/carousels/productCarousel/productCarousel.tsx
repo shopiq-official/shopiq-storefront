@@ -7,11 +7,12 @@ import Autoplay from "embla-carousel-autoplay";
 import styles from "./productCarousel.module.css";
 import { ProductCard } from "@/common/productCard/productCard";
 import usePrevNextButtons from "@/hooks/usePrevNextButtons";
+import { Product } from "@/types";
 
 const NextButton = dynamic(() => import("../buttons/nextBtn"));
 const PrevButton = dynamic(() => import("../buttons/prevBtn"));
 
-const ProductCarousel = ({ data }: any) => {
+const ProductCarousel = ({ data }: { data: Product[] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { align: "start", loop: true },
     [Autoplay()]
@@ -23,7 +24,7 @@ const ProductCarousel = ({ data }: any) => {
     <section className={styles.embla}>
       <div className={styles.embla__viewport} ref={emblaRef}>
         <div className={styles.embla__container}>
-          {data.map((product: any, index: number) => {
+          {data?.map((product: Product, index: number) => {
             return (
               <div className={styles.embla__slide} key={index}>
                 <ProductCard data={product} />

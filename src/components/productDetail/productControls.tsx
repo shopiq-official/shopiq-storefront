@@ -7,42 +7,54 @@ import Minus from "@/assets/Icons/minus.svg";
 import Add from "@/assets/Icons/add.svg";
 import { numToString } from "@/lib/numToString";
 import toast from "react-hot-toast";
-import {calculateAdvancePricing } from "@/lib/calcPrice";
+import { calculateAdvancePricing } from "@/lib/calcPrice";
 import { handlePaymentApi, placeOrder } from "@/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/cart.slice";
-import { useKeyContext } from "@/providers/keyProvider";
+import { keyContextProps, useKeyContext } from "@/providers/keyProvider";
 import Quote from "../QuoteModal/Quote";
-import { CheckisOutOfStock, CheckisQuantityAvailable } from "@/lib/checkOutOfStock";
+import {
+  CheckisOutOfStock,
+  CheckisQuantityAvailable,
+} from "@/lib/checkOutOfStock";
+import { Discount, Product, variantProp } from "@/types";
+import { validateHeaderName } from "http";
 
 let current_order = "";
 
 // 66557ba0aa0843531d8c7518
 
-const ProductControls = ({ data, discounts }: any) => {
+const ProductControls = ({
+  data,
+  discounts,
+}: {
+  data: Product | undefined;
+  discounts: Discount;
+}) => {
   const router = useRouter();
-  const [variants, setVariants]: any = useState({});
-  const [selectedvariant, setSelectedVariant]: any = useState({});
-  const [quantity, setQuantity] = useState(1);
-  const [actualPrice, setActualPrice] = useState<any>(0);
+  const [variants, setVariants] = useState<Record<string, string[]>>({});
+  const [selectedvariant, setSelectedVariant] =
+    useState<Record<string, string>>();
+  const [quantity, setQuantity] = useState<number>(1);
+  const [actualPrice, setActualPrice] = useState<number>(0);
   const [showQuote, setShowQuote] = useState(false);
   const [loading, setLoading] = useState(false);
   const cart = useSelector((state: any) => state.cart.cart);
-  const { key, isShippingChargeActive, shippingCharge }: any = useKeyContext();
-    const [isExpanded, setIsExpanded] = useState(false);
+  const { key, isShippingChargeActive, shippingCharge }: keyContextProps =
+    useKeyContext();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-    const toggleExpand = () => {
-      setIsExpanded(!isExpanded);
-    };
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const dispatch = useDispatch();
 
-  
   useEffect(() => {
-    for (let i = 0; i < data.variant.length; i++) {
-      const variant = data.variant[i];
+    for (let i = 0; i < (data?.variant?.length ?? 0); i++) {
+      const variant: any = data?.variant && (data?.variant[i] as variantProp);
       // console.log(variant);
-      
+
       setVariants((prevVariants: any) => {
         // Create a copy of the previous state
         const newVariants = { ...prevVariants };
@@ -50,110 +62,112 @@ const ProductControls = ({ data, discounts }: any) => {
         // Check if the variant name already exists in state
         if (newVariants.hasOwnProperty(variant.options_name)) {
           // Check if the value already exists in the array
-        //  console.log(newVariants)
+          //  console.log(newVariants)
           if (
             !newVariants[variant.options_name].some(
-              (i: any) => variant.options_value[0]==i
+              (i: any) => variant.options_value[0] == i
             )
           ) {
             // If it doesn't exist, add the value to the array
             // newVariants[variant.options_name].push(variant.options_value[0]);
 
-            variant.options_value.forEach(
-              (val: any) => (newVariants[variant.options_name]?.push(val))
+            variant?.options_value.forEach((val: any) =>
+              newVariants[variant.options_name]?.push(val)
             );
           }
         } else {
           // console.log(variant?.options_value)
           // If the variant name doesn't exist, create a new array with the options value
-           let temp: any = [];
-          variant.options_value.forEach(
-            (val: any) => {
-             
-              temp.push(val);
-              
-              
-            }
-          );
+          let temp: any = [];
+          variant.options_value.forEach((val: any) => {
+            temp.push(val);
+          });
           newVariants[variant.options_name] = temp;
           // console.log(newVariants)
-          
         }
-      //  console.log(newVariants)
+        //  console.log(newVariants)
         return newVariants;
       });
     }
   }, []);
 
-  const handleColorVariant = (color: any) => {
-    let selectedColor = data.variant.filter(
-      (variant: any) => variant.options_value[0] === color
+  const handleColorVariant = (color: string) => {
+    let selectedColor = data?.variant?.filter(
+      (variant: variantProp) =>
+        variant.options_value && variant?.options_value[0] === color
     );
-    if (data.advancePricing) {
+    if (data?.advancePricing) {
       // selectedvariant['color'] = color;
-      setSelectedVariant({...selectedvariant,['color']:color})
+      setSelectedVariant({ ...selectedvariant, ["color"]: color });
     }
     if (!data?.advancePricing) {
-   
       if (selectedColor) router.push("/products/" + selectedColor[0].slug);
- }
+    }
   };
-
- 
 
   const handleShowQuote = () => {
     setShowQuote(true);
   };
 
   const handleBuyNow = () => {
-    let sub_total: any = data?.advancePricing
-      ? calculateAdvancePricing(data,selectedvariant)
-      : data.pricing.price;
-// console.log(sub_total)
-    let igst = data.pricing.igst;
+    let sub_total: string = data?.advancePricing
+      ? calculateAdvancePricing(data, selectedvariant)
+      : data?.pricing?.price;
+    // console.log(sub_total)
+    let igst = data?.pricing?.igst;
 
-    let tax: any = igst;
+    let tax: number = igst ?? 0;
 
-    let productId = data._id;
+    let productId = data?._id;
 
-    if (Object.keys(selectedvariant).length !== 0 && selectedvariant?.size) {
-      const dv = data.variant;
+    if (
+      selectedvariant &&
+      Object.keys(selectedvariant)?.length !== 0 &&
+      selectedvariant?.size
+    ) {
+      const dv: variantProp[] = data?.variant ?? [];
 
-      for (let i = 0; i < dv.length; i++) {
+      for (let i = 0; i < dv?.length; i++) {
         if (
           dv[i].options_name === "size" &&
-          dv[i].options_value.includes(selectedvariant?.size)
+          dv[i]?.options_value?.includes(selectedvariant?.size)
         ) {
-          productId = dv[i].variantProductId._id;
+          productId = dv[i]?.variantProductId?._id;
           break;
         }
       }
     }
 
-    let common_payload: any = {
+    let common_payload = {
       products: [
         {
           productId: productId,
           quantity,
-          mediaUrl: data.mediaUrl[0],
-          variant: Object.keys(selectedvariant).map((val) => ({
+          mediaUrl: data?.mediaUrl ? data?.mediaUrl[0] : "",
+          variant: Object.keys(selectedvariant || {}).map((val) => ({
             options_name: val,
-            options_value: [selectedvariant[val]],
+            options_value: [selectedvariant?.[val]],
           })),
         },
       ],
-      total: sub_total * quantity,
-      subTotal: sub_total * quantity,
+      total: Number(sub_total) * quantity,
+      subTotal: Number(sub_total) * quantity,
       tax: tax,
       orderStatus: false,
       paymentStatus: "unpaid",
       date: new Date(),
+    } as unknown as {
+      // products: any[];
+      total: number;
+      subTotal: number;
+      tax: number;
+      orderStatus: boolean;
+      paymentStatus: string;
+      date: Date;
     };
 
     placeOrder(common_payload)
-      .then((res: any) => {
-        const r = res;
-
+      .then((res) => {
         current_order = res.data.order2._id;
 
         setLoading(false);
@@ -163,17 +177,17 @@ const ProductControls = ({ data, discounts }: any) => {
             {
               productId: productId,
               title: data?.title,
-              price: data?.pricing.price,
+              price: data?.pricing?.price,
               quantity,
-              image: process.env.NEXT_PUBLIC_IMAGE + data.mediaUrl[0],
-              variants: Object.keys(selectedvariant).map((val) => ({
+              image: data?.mediaUrl ? data?.mediaUrl[0] : "",
+              variants: Object.keys(selectedvariant || {})?.map((val) => ({
                 key: val,
-                value: selectedvariant[val],
+                value: selectedvariant?.[val] || "",
               })),
               category: data?.category,
             },
           ],
-          sub_total * quantity,
+          Number(sub_total) * quantity,
           key,
           handlePayment,
           res.data.order2._id,
@@ -185,7 +199,7 @@ const ProductControls = ({ data, discounts }: any) => {
           }
         );
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         toast.error("Something went wrong.");
         setLoading(false);
       });
@@ -193,38 +207,40 @@ const ProductControls = ({ data, discounts }: any) => {
     return;
   };
 
- const handlePayment = (res: any) => {
-   const data: any = {
-     customerId: res.userId,
-     modeOfPayment: res.payment_type === "cod" ? "cod" : "pg",
-     paymentStatus: res.payment_type === "cod" ? "unpaid" : "paid",
-     orderStatus: true,
-     billingAddress: res.billing_address,
-     shippingAddress: res.shipping_address,
-   };
+  const handlePayment = (res: any) => {
+    const data: Record<string, string | boolean | Record<string, string>[]> = {
+      customerId: res.userId,
+      modeOfPayment: res.payment_type === "cod" ? "cod" : "pg",
+      paymentStatus: res.payment_type === "cod" ? "unpaid" : "paid",
+      orderStatus: true,
+      billingAddress: res.billing_address,
+      shippingAddress: res.shipping_address,
+    };
 
-   if (res?.couponId) {
-     data.discount = [
-       { couponId: res?.couponId, totalDiscount: res?.totalDiscount },
-     ];
-   }
+    if (res?.couponId) {
+      data.discount = [
+        { couponId: res?.couponId, totalDiscount: res?.totalDiscount },
+      ];
+    }
 
-   handlePaymentApi(data, current_order, res.token)
-     .then((ress: any) => {
-       res?.when_order_is_placed(() => {
-         router.push("/account");
-       });
-     })
-     .catch((err: any) => {});
- };
-  // console.log(variants)
+    handlePaymentApi(data, current_order, res.token)
+      .then(() => {
+        res?.when_order_is_placed(() => {
+          router.push("/account");
+        });
+      })
+      .catch((err: Error) => {
+        console.log(err);
+      });
+  };
+  // console.log(variants);
   // console.log(variants)
   // console.log(selectedvariant)
   useEffect(() => {
     if (data?.advancePricing) {
       // console.log(selectedvariant);
-      let vart: any = {};
-      Object.keys(variants)?.forEach((val: any) => {
+      let vart: Record<string, string> = {};
+      Object.keys(variants)?.forEach((val: string) => {
         // console.log(val)
 
         vart = { ...vart, [val]: variants[val][0] };
@@ -236,26 +252,22 @@ const ProductControls = ({ data, discounts }: any) => {
     }
   }, [data?.advancePricing, variants]);
 
-
- 
   useEffect(() => {
-   
-  const amount= calculateAdvancePricing(data,selectedvariant)
-  setActualPrice(amount)
-  }, [selectedvariant])
+    const amount = calculateAdvancePricing(data, selectedvariant);
+    setActualPrice(amount);
+  }, [selectedvariant]);
 
-   const isOutOfStock: any = CheckisOutOfStock(data?.inventory, quantity);
-   const isQtyAvailable: any = CheckisQuantityAvailable(
-     data?.inventory,
-     quantity
-   );
-  
-  
+  const isOutOfStock: boolean = CheckisOutOfStock(data?.inventory, quantity);
+  const isQtyAvailable: boolean = CheckisQuantityAvailable(
+    data?.inventory,
+    quantity
+  );
+
   return (
     <>
       <div className={styles.variants_main}>
         <div className={styles.variants_container}>
-          {Object.keys(variants).map((val: any, index: any) => {
+          {Object.keys(variants).map((val: string, index: number) => {
             return (
               <>
                 {val == "color" ? (
@@ -277,7 +289,7 @@ const ProductControls = ({ data, discounts }: any) => {
                           {val} :
                         </p>
 
-                        {variants[val].map((color: any, index: any) => {
+                        {variants[val].map((color: string, index: number) => {
                           return (
                             <div
                               key={index}
@@ -286,11 +298,11 @@ const ProductControls = ({ data, discounts }: any) => {
                                 // padding: "2px",
                                 background: color?.split(":")[1],
                                 border:
-                                  selectedvariant["color"] === color
+                                  selectedvariant?.["color"] === color
                                     ? "2px solid white"
                                     : "",
                                 outline:
-                                  selectedvariant["color"] === color
+                                  selectedvariant?.["color"] === color
                                     ? "2px solid var(--primary)"
                                     : "1px solid var(--primary)",
                               }}
@@ -322,18 +334,18 @@ const ProductControls = ({ data, discounts }: any) => {
                       {val == "custom-1" ? "Design" : "Fit"} :
                     </p>
                     <div className={styles.variant} key={index}>
-                      {variants[val].map((value: any, ind: any) => {
+                      {variants[val].map((value: string, ind: number) => {
                         return (
                           <div
                             key={ind}
                             style={{
                               cursor: "pointer",
                               backgroundColor:
-                                selectedvariant[val] === value
+                                selectedvariant?.[val] === value
                                   ? "var(--primary)"
                                   : "",
                               color:
-                                selectedvariant[val] === value
+                                selectedvariant?.[val] === value
                                   ? "var(--neutral)"
                                   : "",
                             }}
@@ -370,18 +382,18 @@ const ProductControls = ({ data, discounts }: any) => {
                       {val} :
                     </p>
                     <div className={styles.variant} key={index}>
-                      {variants[val].map((value: any, ind: any) => {
+                      {variants[val].map((value: string, ind: number) => {
                         return (
                           <div
                             key={ind}
                             style={{
                               cursor: "pointer",
                               backgroundColor:
-                                selectedvariant["size"] === value
+                                selectedvariant?.["size"] === value
                                   ? "var(--primary)"
                                   : "",
                               color:
-                                selectedvariant["size"] === value
+                                selectedvariant?.["size"] === value
                                   ? "var(--neutral)"
                                   : "",
                             }}
@@ -429,9 +441,7 @@ const ProductControls = ({ data, discounts }: any) => {
               <div
                 className={styles.qc_increase}
                 onClick={() =>
-                  setQuantity((prev) =>
-                    isQtyAvailable ? prev + 1 : prev
-                  )
+                  setQuantity((prev) => (isQtyAvailable ? prev + 1 : prev))
                 }
               >
                 <Add />
@@ -446,7 +456,7 @@ const ProductControls = ({ data, discounts }: any) => {
               <h4>₹{data.pricing?.comparePrice}</h4>
             )}
           </span>
-          {data?.pricing?.igst > 0 && (
+          {data?.pricing?.igst && (
             <h5>Price inclusive of {data?.pricing?.igst}% GST. </h5>
           )}
           {isOutOfStock && (
@@ -510,9 +520,7 @@ const ProductControls = ({ data, discounts }: any) => {
               {"ADD TO CART"}
             </button>
 
-         
-
-            {data.requestQuote && (
+            {data?.requestQuote && (
               <h5
                 className={styles.request_btn}
                 onClick={() => handleShowQuote()}
@@ -531,7 +539,7 @@ const ProductControls = ({ data, discounts }: any) => {
           >
             <p
               dangerouslySetInnerHTML={{
-                __html: data?.description?.replace(/&nbsp;/g, " "),
+                __html: data?.description?.replace(/&nbsp;/g, " ") || "",
               }}
             ></p>
           </div>

@@ -7,10 +7,10 @@ type Props = {
   type: string;
   value: string;
   isLocked: boolean;
-  onChange: any;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
   placeholder: string;
-  onFocus?: any;
-  onBlur?: any;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 };
 
 const InputField = (props: Props) => {

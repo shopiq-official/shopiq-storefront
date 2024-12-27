@@ -12,7 +12,9 @@ import Orders from "@/components/account/orders";
 
 const Account = () => {
   // Get the current status from the Redux store
-  const retainoStatus: any = useSelector((state: any) => state.retaino.state);
+  const retainoStatus: string = useSelector(
+    (state: any) => state.retaino.state
+  );
   const router = useRouter();
 
   // Show a loading spinner while the status is loading
@@ -61,7 +63,7 @@ const Account = () => {
       </div>
       <div className={styles.content}>
         <ul className={styles.sections}>
-          <li className={styles.active}>Orders</li> 
+          <li className={styles.active}>Orders</li>
         </ul>
         <div>
           <Orders /> {/* Component to display user orders */}

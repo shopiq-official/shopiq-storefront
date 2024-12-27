@@ -4,8 +4,6 @@ import styles from "./productCard.module.css";
 import { Suspense, useState } from "react";
 import CardImage from "../image/Image";
 
-const imgUrl = process.env.NEXT_PUBLIC_IMAGE;
-
 export const ProductCard = ({ data }: any) => {
   const multipleImages = data?.mediaUrl?.length > 1;
 
@@ -20,7 +18,7 @@ export const ProductCard = ({ data }: any) => {
           <div className={styles.cardImage}>
             <Suspense fallback={<p>Loading......</p>}>
               <CardImage
-                src={`${imgUrl}${data?.mediaUrl[0]}`}
+                src={`${data?.mediaUrl[0]}`}
                 alt="..."
                 className={styles.img1}
               />
@@ -30,12 +28,12 @@ export const ProductCard = ({ data }: any) => {
         {multipleImages && (
           <div className={styles.cardImageMultiple}>
             <CardImage
-              src={`${imgUrl}${data?.mediaUrl[0]}`}
+              src={`${data?.mediaUrl[0]}`}
               alt="..."
               className={styles.img1}
             />
             <CardImage
-              src={`${imgUrl}${data?.mediaUrl[1]}`}
+              src={`${data?.mediaUrl[1]}`}
               alt="..."
               className={styles.img2}
             />

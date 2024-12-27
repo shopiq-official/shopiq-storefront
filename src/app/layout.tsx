@@ -8,6 +8,7 @@ import { getWebsiteData } from "@/api";
 import Head from "next/head";
 import Script from "next/script";
 import React from "react";
+import { Product } from "@/types";
 const identifier = process.env.NEXT_PUBLIC_IDENTIFIER;
 const inter = Inter({ subsets: ["latin"], variable: "--main-primary-font" });
 const nunito = Nunito({
@@ -18,8 +19,7 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   manifest: "/manifest.json",
   title: "ENTER_TITLE",
-  description:
-    "ENTER_DESCRIPTION",
+  description: "ENTER_DESCRIPTION",
 };
 
 export const viewport: Viewport = {
@@ -46,11 +46,11 @@ export default async function RootLayout({
   const scripts = websiteData?.data?.scripts || [];
   const jsonLd: any = [];
   let res: any = await fetch(
-    `https://backend.cftcommerce.com/api/products/filter?isVariant=false&identifier=${identifier}&limit=1000000`,
+    `https://api.shopiq.app/api/products/filter?isVariant=false&identifier=${identifier}&limit=1000000`,
     { next: { tags: ["products"] } }
   );
   res = await res.json();
-  res.data.forEach((product: any) => {
+  res.data.forEach((product: Product) => {
     jsonLd.push({
       "@context": "https://schema.org",
       "@type": "Product",
@@ -69,7 +69,7 @@ export default async function RootLayout({
         />
         {scripts
           .filter((val: any) => val.scriptPosition === "head")
-          .map((script: any, index: any) => {
+          .map((script: any, index: number) => {
             let temp = script.value;
 
             if (script.scriptType === "google_tag_manager") {
@@ -93,7 +93,7 @@ export default async function RootLayout({
       <body className={`${inter.className} ${nunito.className}`}>
         {scripts
           .filter((val: any) => val.scriptPosition === "body")
-          .map((script: any, index: any) => {
+          .map((script: any, index: number) => {
             if (script.scriptType === "google_tag_manager") {
               // Remove comments and <noscript> tags from script.value
               let temp = script.value.replace(/<!--[\s\S]*?-->/g, "");

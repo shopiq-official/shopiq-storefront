@@ -1,10 +1,12 @@
-import Head from "next/head";
+import { ReactNode } from "react";
 
-const BookAppointment = ({ children }: any) => {
+const BookAppointment = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <head>
-        <title>Contact Us | ENTER_WEBSITE_NAME</title>
+        <title>
+          {`Contact Us | ${process.env.NEXT_PUBLIC_WEBSITE_NAME_FOR_TITLE}`}
+        </title>
       </head>
       {children}
     </div>

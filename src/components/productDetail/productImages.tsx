@@ -5,12 +5,13 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import MyReactImageMagnify from "./MyReactImageMagnify";
 import SimilarProduct from "./similarProducts";
+import { EmblaOptionsType } from "embla-carousel";
 
-const ProductImages = ({ data, similar, crossSellProducts }: any) => {
+const ProductImages = ({ data, similar }: any) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel();
 
-  const [view, setView]: any = useState("x");
+  const [view, setView] = useState<"x" | "y">("x");
 
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
@@ -48,7 +49,7 @@ const ProductImages = ({ data, similar, crossSellProducts }: any) => {
       <div className={styles.secondary_images}>
         <div className={styles.embla_thumbs__viewport} ref={emblaThumbsRef}>
           <div className={styles.embla_thumbs__container}>
-            {data.map((img: any, index: any) => {
+            {data.map((img: any, index: number) => {
               return (
                 <Thumb
                   key={index}
@@ -64,7 +65,7 @@ const ProductImages = ({ data, similar, crossSellProducts }: any) => {
       </div>
       <div className={styles.main_image} ref={emblaMainRef}>
         <div className={styles.embla__container}>
-          {data.map((img: any, index: any) => {
+          {data.map((img: any, index: number) => {
             return (
               <div key={index} className={styles.embla__slides}>
                 <MyReactImageMagnify img={img} />

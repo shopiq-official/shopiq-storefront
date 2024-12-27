@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./mobileMenu.module.css";
 
 import Link from "next/link";
-import { social_media_links } from "@/lib/footer";
+import { social_media_links } from "@/lib/constants";
 import RightIcon from "@/assets/Icons/nav/arrow.svg";
 import Image from "next/image";
 import { navSequence } from "@/lib/navSequence";
@@ -105,7 +105,7 @@ const DynamicNav = ({ val, data, onClose }: any) => {
         <span
           className={`${styles.sub_menu} ${show && styles.sub_menu_active}`}
         >
-          {data?.map((vall: any, ind: any) => {
+          {data?.map((vall: any, ind: number) => {
             return (
               <Link href={`/${val}/${vall}`} key={ind} onClick={onClose}>
                 <ol style={{ textTransform: "capitalize" }}>{vall}</ol>

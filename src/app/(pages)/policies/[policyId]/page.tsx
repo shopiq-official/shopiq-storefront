@@ -8,10 +8,10 @@ import { Metadata } from "next";
 import axios from "axios";
 import Head from "next/head";
 import { capitalize } from "@/lib/capitalize";
+import { Compliance } from "@/types";
 
-
-const Policies = (props: any) => {
-  const [policy, setPolicy] = useState<any>();
+const Policies = (props: { params: Record<string, string> }) => {
+  const [policy, setPolicy] = useState<Compliance>();
   const [loading, setLoading] = useState(true);
   // const policy = getPolicy();
 
@@ -21,11 +21,9 @@ const Policies = (props: any) => {
 
   function getPolicy() {
     axios
-      .get(
-        "https://backend.cftcommerce.com/api/compliances?identifier=YOUR_IDENTIFIER"
-      )
+      .get("https://api.shopiq.app/api/compliances?identifier=YOUR_IDENTIFIER")
       .then((res) => {
-        let temp = res.data.compliances.find((val: any) => {
+        let temp = res.data.compliances.find((val: Compliance) => {
           if (val.typeName === props.params.policyId) {
             return true;
           }
@@ -37,7 +35,9 @@ const Policies = (props: any) => {
           return false;
         });
         setPolicy(temp);
-        document.title = capitalize(`${temp?.title} | ENTER_WEBSITE_NAME`);
+        document.title = capitalize(
+          `${temp?.title} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME_FOR_TITLE}`
+        );
         setLoading(false);
       })
       .catch((error) => {
@@ -69,7 +69,7 @@ const Policies = (props: any) => {
               <div className={styles.content}>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: policy?.body?.replace(/&nbsp;/g, " "),
+                    __html: policy?.body?.replace(/&nbsp;/g, " ") ?? "",
                   }}
                   className={styles.content_body}
                 ></div>

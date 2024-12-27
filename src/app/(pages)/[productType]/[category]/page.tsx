@@ -5,10 +5,11 @@ import ProductsList from "@/components/products/productsList";
 import { FilterMobile } from "@/components/products/filterMobile";
 import { getCategories, getCategoriesOfType, getFilterData } from "@/api";
 import Image from "next/image";
+import { Category } from "@/types";
 
 // Function to generate static parameters for the page
 export async function generateStaticParams() {
-  const categories: any = await getCategoriesOfType();
+  const categories: Record<string, string[]> = await getCategoriesOfType();
 
   let all_values = [];
   const p_types = Object.keys(categories).filter((val) => val);
@@ -29,26 +30,37 @@ export async function generateStaticParams() {
   // Return filtered and mapped values for static generation
   return all_values
     .filter((v) => v[0] && v[1])
-    .map((product: any) => ({
+    .map((product: string[]) => ({
       productType: product[0],
       category: product[1],
     }));
 }
 
 // Main Page component
-const Page = async ({ searchParams, params }: any) => {
+const Page = async ({
+  searchParams,
+  params,
+}: {
+  searchParams: Record<string, string | number | boolean>;
+  params: Record<string, string>;
+}) => {
   const category = await getCategories(); // Fetch categories
   const filterData = await getFilterData(); // Fetch filter data
 
-
-  let [productType, cat]: any = [
+  let [productType, cat] = [
     decodeURIComponent(params.productType), // Decode product type from params
     decodeURIComponent(params.category), // Decode category from params
   ];
 
-
   // Return empty fragment if category is not defined
   if (!cat) return <></>;
+
+  const selectedCategory = category.find(
+    (v: Category) =>
+      v?.title && v.title.toLowerCase().trim() === searchParams.category
+  );
+
+  const mediaUrl = selectedCategory?.media?.[0]?.mediaUrl;
 
   return (
     <div>
@@ -66,27 +78,20 @@ const Page = async ({ searchParams, params }: any) => {
               </div>
             ) : (
               <>
-                {category.find((v: any) => v.title.toLowerCase().trim() === cat)
-                  ?.media[0]?.mediaUrl && (
-                  <div className={styles.banner}>
-                    <Image
-                      src={
-                        process.env.NEXT_PUBLIC_IMAGE +
-                        category.find(
-                          (v: any) => v.title.toLowerCase().trim() === cat
-                        ).media[0].mediaUrl
-                      }
-                      width={1000}
-                      height={400}
-                      alt=""
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
-                )}
+                <div className={styles.banner}>
+                  <Image
+                    src={mediaUrl || ""}
+                    width={1000}
+                    height={400}
+                    alt=""
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+
                 <div className={styles.simple_hero}>
                   <h1>{cat}</h1>
                   <FilterMobile

@@ -58,7 +58,7 @@ export const AnalyticsPart = () => {
 
       // Send a fetch request to the analytics endpoint
       fetch(
-        `https://backend.cftcommerce.com/api/analytics/websiteView?identifier=YOUR_IDENTIFIER&comingFrom=${comingFrom}`
+        `https://api.shopiq.app/api/analytics/websiteView?identifier=YOUR_IDENTIFIER&comingFrom=${comingFrom}`
       );
 
       return true; // Exit the function after processing

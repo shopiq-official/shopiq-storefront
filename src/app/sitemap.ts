@@ -1,39 +1,47 @@
 import { getCategoriesOfType } from "@/api";
+import { Product } from "@/types";
 import { MetadataRoute } from "next";
 
 const identifier = process.env.NEXT_PUBLIC_IDENTIFIER;
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const arr: any = [
+type Prop = {
+  url?: string | any;
+  lastModified?: Date;
+  priority?: number;
+};
+
+export default async function sitemap(): Promise<any> {
+  const arr: Prop[] = [
     {
       url: process.env.NEXT_PUBLIC_WEBSITE_URL,
       lastModified: new Date(),
       priority: 1,
     },
     {
-      url: process.env.NEXT_PUBLIC_WEBSITE_URL+"/products",
+      url: process.env.NEXT_PUBLIC_WEBSITE_URL + "/products",
       lastModified: new Date(),
       priority: 0.8,
     },
 
     {
-      url: process.env.NEXT_PUBLIC_WEBSITE_URL+"/know-your-brand",
+      url: process.env.NEXT_PUBLIC_WEBSITE_URL + "/know-your-brand",
       lastModified: new Date(),
       priority: 0.8,
     },
 
     {
-      url: process.env.NEXT_PUBLIC_WEBSITE_URL+"/contact-us",
+      url: process.env.NEXT_PUBLIC_WEBSITE_URL + "/contact-us",
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: process.env.NEXT_PUBLIC_WEBSITE_URL+"/policies/privacy-policy",
+      url: process.env.NEXT_PUBLIC_WEBSITE_URL + "/policies/privacy-policy",
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: process.env.NEXT_PUBLIC_WEBSITE_URL+"/policies/terms-and-conditions",
+      url:
+        process.env.NEXT_PUBLIC_WEBSITE_URL + "/policies/terms-and-conditions",
       lastModified: new Date(),
       priority: 0.8,
     },
@@ -43,36 +51,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: process.env.NEXT_PUBLIC_WEBSITE_URL+"/policies/shipping-policy",
+      url: process.env.NEXT_PUBLIC_WEBSITE_URL + "/policies/shipping-policy",
       lastModified: new Date(),
       priority: 0.8,
     },
   ];
 
-  let res: any = await fetch(
-    `https://backend.cftcommerce.com/api/products/filter?isVariant=false&identifier=${identifier}&limit=1000000`,
+  let res = await fetch(
+    `https://api.shopiq.app/api/products/filter?isVariant=false&identifier=${identifier}&limit=1000000`,
     { next: { tags: ["products"] } }
   );
 
-  res = await res.json();
+  let data = await res.json();
 
-  res.data.forEach((product: any) => {
+  data.data.forEach((product: Product & { updatedAt: Date }) => {
     arr.push({
       url:
-        process.env.NEXT_PUBLIC_WEBSITE_URL+"/products/" +
+        process.env.NEXT_PUBLIC_WEBSITE_URL +
+        "/products/" +
         product.seListing?.routeHandle,
       lastModified: product?.updatedAt,
       priority: 0.8,
     });
   });
 
-  let cat_res: any = await getCategoriesOfType();
+  let cat_res =
+    (await getCategoriesOfType()) as unknown as { [key: string]: string[] };
 
   let keys = Object.keys(cat_res).filter((val) => val);
 
   keys.forEach((val) => {
     arr.push({
-      url: process.env.NEXT_PUBLIC_WEBSITE_URL+ val,
+      url: process.env.NEXT_PUBLIC_WEBSITE_URL + val,
       priority: 0.8,
     });
   });
@@ -81,7 +91,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (cat_res[keys[i]].length !== 0) {
       for (let j = 0; j < cat_res[keys[i]].length; j++) {
         arr.push({
-          url: process.env.NEXT_PUBLIC_WEBSITE_URL+`/${keys[i]}/${cat_res[keys[i]][j]}`,
+          url:
+            process.env.NEXT_PUBLIC_WEBSITE_URL +
+            `/${keys[i]}/${cat_res[keys[i]][j]}`,
           priority: 0.8,
         });
       }

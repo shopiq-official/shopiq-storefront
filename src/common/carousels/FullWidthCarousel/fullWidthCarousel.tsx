@@ -8,13 +8,12 @@ import Image from "next/image";
 import usePrevNextButtons from "@/hooks/usePrevNextButtons";
 import Autoplay from "embla-carousel-autoplay";
 import { useState } from "react";
+import { Hero } from "@/types";
 
 const NextButton = dynamic(() => import("../buttons/nextBtn"));
 const PrevButton = dynamic(() => import("../buttons/prevBtn"));
 
-type Props = any;
-
-const FullWidthCarousel = ({ data }: Props) => {
+const FullWidthCarousel = ({ data }: { data: Hero[] }) => {
   const router = useRouter();
   const [loadedIndexes, setLoadedIndexes] = useState([data[0]]);
   const [loop, setLoop] = useState(false);
@@ -39,7 +38,7 @@ const FullWidthCarousel = ({ data }: Props) => {
     <section className={styles.embla}>
       <div className={styles.embla__viewport} ref={emblaRef}>
         <div className={styles.embla__container}>
-          {loadedIndexes.map((val: any, index: number) => (
+          {loadedIndexes.map((val: Hero, index: number) => (
             <div
               className={styles.embla__slide}
               key={index}
@@ -56,31 +55,73 @@ const FullWidthCarousel = ({ data }: Props) => {
               <div className={styles.event_carousel_image}>
                 <div className={styles.overlay_text}>
                   <h1>{val?.title}</h1>
-                  {val?.isButton && (
+                  {val?.isButton && val?.onClickUrl && (
                     <button
                       aria-label={"Hero Action"}
-                      onClick={() => router.push(val.onClickUrl)}
+                      onClick={() => router.push(val.onClickUrl ?? "/")}
                     >
                       {val.buttonValue}
                     </button>
                   )}
                 </div>
 
-                <div className={styles.more_than_700}>
-                  {val?.mediaUrl.split(".")[1] == "webp" ||
-                  val?.mediaUrl.split(".")[1] == "jpeg" ||
-                  val?.mediaUrl.split(".")[1] == "jpg" ||
-                  val?.mediaUrl.split(".")[1] == "png" ? (
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE + val?.mediaUrl}
-                      alt="..."
-                      width={1500}
-                      height={1500}
-                      onLoad={handleLoadingComplete}
-                      priority={index == 0}
-                    />
-                  ) : (
-                    <>
+                {val.mediaUrl && (
+                  <div className={styles.more_than_700}>
+                    {val?.mediaUrl.split(".")[1] == "webp" ||
+                    val?.mediaUrl.split(".")[1] == "jpeg" ||
+                    val?.mediaUrl.split(".")[1] == "jpg" ||
+                    val?.mediaUrl.split(".")[1] == "png" ? (
+                      <Image
+                        src={val?.mediaUrl}
+                        alt="..."
+                        width={1500}
+                        height={1500}
+                        onLoad={handleLoadingComplete}
+                        priority={index == 0}
+                      />
+                    ) : (
+                      <>
+                        <div style={{ height: "100%", width: "100%" }}>
+                          <video
+                            autoPlay
+                            muted
+                            playsInline
+                            loop
+                            style={{
+                              width: "100vw",
+                              height: "100%",
+                              objectFit: "cover",
+                              objectPosition: "top",
+                              position: "relative",
+                              pointerEvents: "none",
+                            }}
+                            className="react-player"
+                            onLoadedData={handleLoadingComplete}
+                          >
+                            <source src={`${val?.mediaUrl}`} />
+                          </video>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {val.mobMediaUrl && (
+                  <div className={styles.less_than_700}>
+                    {val?.mobMediaUrl.split(".")[1] == "webp" ||
+                    val?.mobMediaUrl.split(".")[1] == "jpeg" ||
+                    val?.mobMediaUrl.split(".")[1] == "jpg" ||
+                    val?.mobMediaUrl.split(".")[1] == "png" ? (
+                      <Image
+                        src={val?.mobMediaUrl}
+                        alt="..."
+                        width={391}
+                        height={695}
+                        quality={10}
+                        priority={index == 0 ? true : false}
+                        onLoadingComplete={handleLoadingComplete}
+                      />
+                    ) : (
                       <div style={{ height: "100%", width: "100%" }}>
                         <video
                           autoPlay
@@ -88,7 +129,7 @@ const FullWidthCarousel = ({ data }: Props) => {
                           playsInline
                           loop
                           style={{
-                            width: "100vw",
+                            width: "100%",
                             height: "100%",
                             objectFit: "cover",
                             objectPosition: "top",
@@ -98,54 +139,12 @@ const FullWidthCarousel = ({ data }: Props) => {
                           className="react-player"
                           onLoadedData={handleLoadingComplete}
                         >
-                          <source
-                            src={`${process.env.NEXT_PUBLIC_IMAGE}/${val?.mediaUrl}`}
-                          />
+                          <source src={`${val?.mobMediaUrl}`} />
                         </video>
                       </div>
-                    </>
-                  )}
-                </div>
-
-                <div className={styles.less_than_700}>
-                  {val?.mobMediaUrl.split(".")[1] == "webp" ||
-                  val?.mobMediaUrl.split(".")[1] == "jpeg" ||
-                  val?.mobMediaUrl.split(".")[1] == "jpg" ||
-                  val?.mobMediaUrl.split(".")[1] == "png" ? (
-                    <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE + val?.mobMediaUrl}
-                      alt="..."
-                      width={391}
-                      height={695}
-                      quality={10}
-                      priority={index == 0 ? true : false}
-                      onLoadingComplete={handleLoadingComplete}
-                    />
-                  ) : (
-                    <div style={{ height: "100%", width: "100%" }}>
-                      <video
-                        autoPlay
-                        muted
-                        playsInline
-                        loop
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          objectPosition: "top",
-                          position: "relative",
-                          pointerEvents: "none",
-                        }}
-                        className="react-player"
-                        onLoadedData={handleLoadingComplete}
-                      >
-                        <source
-                          src={`${process.env.NEXT_PUBLIC_IMAGE}/${val?.mobMediaUrl}`}
-                        />
-                      </video>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}

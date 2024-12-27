@@ -8,11 +8,12 @@ import Image from "next/image";
 import usePrevNextButtons from "@/hooks/usePrevNextButtons";
 import Autoplay from "embla-carousel-autoplay";
 import { useState } from "react";
+import { Content, Hero } from "@/types";
 
 const NextButton = dynamic(() => import("@/common/carousels/buttons/nextBtn"));
 const PrevButton = dynamic(() => import("@/common/carousels/buttons/prevBtn"));
 
-type Props = any;
+type Props = { data: Hero[] };
 
 const HomeContentCarousel = ({ data }: Props) => {
   const router = useRouter();
@@ -40,7 +41,7 @@ const HomeContentCarousel = ({ data }: Props) => {
     <section className={styles.embla}>
       <div className={styles.embla__viewport} ref={emblaRef}>
         <div className={styles.embla__container}>
-          {loadedIndexes.map((val: any, index: number) => (
+          {loadedIndexes.map((val: Hero, index: number) => (
             <div
               className={styles.embla__slide}
               key={index}
@@ -57,10 +58,10 @@ const HomeContentCarousel = ({ data }: Props) => {
               <div className={styles.event_carousel_image}>
                 <div className={styles.overlay_text}>
                   <h1>{val?.title}</h1>
-                  {val?.isButton && (
+                  {val?.isButton && val?.onClickUrl && (
                     <button
                       aria-label={"Hero Action"}
-                      onClick={() => router.push(val.onClickUrl)} // Navigate on button click
+                      onClick={() => router.push(val?.onClickUrl ?? "")} // Navigate on button click
                     >
                       {val.buttonValue}
                     </button>
@@ -68,12 +69,12 @@ const HomeContentCarousel = ({ data }: Props) => {
                 </div>
 
                 <div className={styles.more_than_700}>
-                  {val?.mediaUrl.split(".")[1] == "webp" ||
-                  val?.mediaUrl.split(".")[1] == "jpeg" ||
-                  val?.mediaUrl.split(".")[1] == "jpg" ||
-                  val?.mediaUrl.split(".")[1] == "png" ? (
+                  {val?.mediaUrl?.endsWith("webp") ||
+                  val?.mediaUrl?.endsWith("jpeg") ||
+                  val?.mediaUrl?.endsWith("jpg") ||
+                  val?.mediaUrl?.endsWith("png") ? (
                     <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE + val?.mediaUrl}
+                      src={val?.mediaUrl}
                       alt="..."
                       width={1500}
                       height={1500}
@@ -98,21 +99,19 @@ const HomeContentCarousel = ({ data }: Props) => {
                         className="react-player"
                         onLoadedData={handleLoadingComplete} // Handle loading completion for video
                       >
-                        <source
-                          src={`${process.env.NEXT_PUBLIC_IMAGE}/${val?.mediaUrl}`}
-                        />
+                        <source src={`${val?.mediaUrl}`} />
                       </video>
                     </div>
                   )}
                 </div>
 
                 <div className={styles.less_than_700}>
-                  {val?.mobMediaUrl.split(".")[1] == "webp" ||
-                  val?.mobMediaUrl.split(".")[1] == "jpeg" ||
-                  val?.mobMediaUrl.split(".")[1] == "jpg" ||
-                  val?.mobMediaUrl.split(".")[1] == "png" ? (
+                  {val?.mediaUrl?.endsWith("webp") ||
+                  val?.mediaUrl?.endsWith("jpeg") ||
+                  val?.mediaUrl?.endsWith("jpg") ||
+                  val?.mediaUrl?.endsWith("png") ? (
                     <Image
-                      src={process.env.NEXT_PUBLIC_IMAGE + val?.mobMediaUrl}
+                      src={val?.mobMediaUrl ?? ""}
                       alt="..."
                       width={391}
                       height={695}
@@ -138,9 +137,7 @@ const HomeContentCarousel = ({ data }: Props) => {
                         className="react-player"
                         onLoadedData={handleLoadingComplete} // Handle loading completion for mobile video
                       >
-                        <source
-                          src={`${process.env.NEXT_PUBLIC_IMAGE}/${val?.mobMediaUrl}`}
-                        />
+                        <source src={`${val?.mobMediaUrl}`} />
                       </video>
                     </div>
                   )}

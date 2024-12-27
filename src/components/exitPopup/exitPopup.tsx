@@ -1,13 +1,12 @@
 "use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import CloseIcon from "@/assets/Icons/cross.svg";
-import newimage from "../../../public/images/newBannerImage.png";
+
 import styles from "./exitPopup.module.css";
 import { submitContact } from "@/api";
 
-const ExitPopup = ({ open }: any) => {
+const ExitPopup = ({ open }: { open: any }) => {
   const [email, setEmail] = useState("");
 
   const handleShow = () => {
@@ -58,7 +57,7 @@ const ExitPopup = ({ open }: any) => {
               <CloseIcon className={styles.mob_close_icon} />
             </span>
           </span>
-          <Image src={newimage} alt="..." />
+          <Image src={""} alt="..." />
         </div>
       </div>
     </div>

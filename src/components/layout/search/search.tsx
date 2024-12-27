@@ -43,7 +43,7 @@ const Search = (props: Props) => {
         .then((res: any) => {
           setResults(res.data);
         })
-        .catch((err: any) => {});
+        .catch((err: Error) => {});
     } else {
       return setResults([]);
     }
@@ -87,7 +87,7 @@ const Search = (props: Props) => {
                     className={styles.default_categories}
                     onClick={() => props.onClose()}
                   >
-                    {props.categories?.map((val: any, ind: any) => {
+                    {props.categories?.map((val: any, ind: number) => {
                       return (
                         <p
                           key={ind}
@@ -107,7 +107,7 @@ const Search = (props: Props) => {
                     className={styles.trending_now}
                     onClick={() => props.onClose()}
                   >
-                    {props.bestSeller?.map((val: any, ind: any) => {
+                    {props.bestSeller?.map((val: any, ind: number) => {
                       return (
                         <div
                           onClick={() => {
@@ -119,9 +119,7 @@ const Search = (props: Props) => {
                           key={ind}
                         >
                           <Image
-                            src={
-                              process.env.NEXT_PUBLIC_IMAGE + val.mediaUrl[0]
-                            }
+                            src={val.mediaUrl[0]}
                             alt={val?.title}
                             height={1500}
                             width={1500}
@@ -145,7 +143,7 @@ const Search = (props: Props) => {
               </div>
             ) : (
               <ul>
-                {results.map((item: any, index: any) => {
+                {results.map((item: any, index: number) => {
                   return (
                     <li
                       key={index}
@@ -154,10 +152,7 @@ const Search = (props: Props) => {
                         router.push(`/products/${item.seListing.routeHandle}`);
                       }}
                     >
-                      <img
-                        src={`${process.env.NEXT_PUBLIC_IMAGE}${item?.mediaUrl[0]}`}
-                        alt=""
-                      />
+                      <img src={`${item?.mediaUrl[0]}`} alt="" />
                       <div>
                         <h3>{capitalize(item?.title)}</h3>
                         <h4>{capitalize(item.category)}</h4>

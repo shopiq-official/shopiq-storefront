@@ -38,7 +38,7 @@ const ContactForm = () => {
     if (validate()) {
       setLoading(true);
       axios({
-        url: "https://backend.cftcommerce.com/api/contacts",
+        url: "https://api.shopiq.app/api/contacts",
         method: "POST",
         data: {
           identifier: process.env.NEXT_PUBLIC_IDENTIFIER,
@@ -78,28 +78,36 @@ const ContactForm = () => {
           <InputField
             type="text"
             value={firstName}
-            onChange={(e: any) => setFirstName(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFirstName(e.target.value)
+            }
             isLocked={false}
             placeholder="First Name"
           />
           <InputField
             type="text"
             value={lastName}
-            onChange={(e: any) => setLastName(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setLastName(e.target.value)
+            }
             isLocked={false}
             placeholder="Last Name"
           />
           <InputField
             type="text"
             value={email}
-            onChange={(e: any) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
             isLocked={false}
             placeholder="Email Address"
           />
           <InputField
             type="number"
             value={mobile}
-            onChange={(e: any) => setMobile(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setMobile(e.target.value)
+            }
             isLocked={false}
             placeholder="Mobile Number"
           />
@@ -107,7 +115,9 @@ const ContactForm = () => {
           <textarea
             placeholder="Message"
             value={message}
-            onChange={(e: any) => setMessage(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setMessage(e.target.value)
+            }
           />
           {loading ? (
             <button style={{ background: "var(--primary)" }}>

@@ -5,6 +5,7 @@ import styles from "./similarProducts.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import CloseIcon from "@/assets/Icons/cross.svg";
+import { Product } from "@/types";
 
 const SimilarProducts = ({ similarProduct, crossSellProducts }: any) => {
   const [modal, setModal] = useState(false);
@@ -59,15 +60,12 @@ const SimilarProducts = ({ similarProduct, crossSellProducts }: any) => {
                 {section == "similar" ? (
                   <>
                     {similarProduct?.length > 0 &&
-                      similarProduct.map((val: any, ind: any) => {
+                      similarProduct.map((val: any, ind: number) => {
                         return (
                           <Link href={"/products/" + val?.slug} key={ind}>
                             <div className={styles.main_card} key={ind}>
                               <Image
-                                src={
-                                  process.env.NEXT_PUBLIC_IMAGE +
-                                  val?.mediaUrl[0]
-                                }
+                                src={val?.mediaUrl[0]}
                                 alt="products not found"
                                 width={1500}
                                 height={1500}
@@ -82,15 +80,12 @@ const SimilarProducts = ({ similarProduct, crossSellProducts }: any) => {
                 ) : (
                   <>
                     {crossSellProducts?.length > 0 &&
-                      crossSellProducts.map((val: any, ind: any) => {
+                      crossSellProducts.map((val: any, ind: number) => {
                         return (
                           <Link href={"/products/" + val?.slug} key={ind}>
                             <div className={styles.main_card} key={ind}>
                               <Image
-                                src={
-                                  process.env.NEXT_PUBLIC_IMAGE +
-                                  val?.mediaUrl[0]
-                                }
+                                src={val?.mediaUrl[0]}
                                 alt="products not found"
                                 width={1500}
                                 height={1500}

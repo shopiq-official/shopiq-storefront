@@ -1,17 +1,30 @@
-
 import styles from "./products.module.css";
-import { Filter } from "@/components/products/filter"; 
-import { Suspense } from "react"; 
-import ProductsList from "@/components/products/productsList"; 
-import { FilterMobile } from "@/components/products/filterMobile"; 
-import { getCategories, getFilterData } from "@/api"; 
-import Image from "next/image"; 
+import { Filter } from "@/components/products/filter";
+import { Suspense } from "react";
+import ProductsList from "@/components/products/productsList";
+import { FilterMobile } from "@/components/products/filterMobile";
+import { getCategories, getFilterData } from "@/api";
+import Image from "next/image";
+import { Category } from "@/types";
 
 // Main Page component
-const Page = async ({ searchParams, params }: any) => {
+const Page = async ({
+  searchParams,
+  params,
+}: {
+  searchParams: Record<string, string | number | boolean>;
+  params: Record<string, string>;
+}) => {
   // Fetching categories and filter data from the API
   const category = await getCategories();
   const filterData = await getFilterData();
+
+  const selectedCategory = category.find(
+    (v: Category) =>
+      v?.title && v.title.toLowerCase().trim() === searchParams.category
+  );
+
+  const mediaUrl = selectedCategory?.media?.[0]?.mediaUrl;
 
   return (
     <div>
@@ -30,20 +43,10 @@ const Page = async ({ searchParams, params }: any) => {
             ) : (
               <>
                 {/* Displaying category banner if it exists */}
-                {category.find(
-                  (v: any) =>
-                    v.title.toLowerCase().trim() === searchParams.category
-                )?.media[0]?.mediaUrl && (
+                {
                   <div className={styles.banner}>
                     <Image
-                      src={
-                        process.env.NEXT_PUBLIC_IMAGE +
-                        category.find(
-                          (v: any) =>
-                            v.title.toLowerCase().trim() ===
-                            searchParams.category
-                        ).media[0].mediaUrl
-                      }
+                      src={mediaUrl || ""} // Image URL
                       width={1000}
                       height={400}
                       alt="" // Alt text should be descriptive for accessibility
@@ -54,7 +57,7 @@ const Page = async ({ searchParams, params }: any) => {
                       }}
                     />
                   </div>
-                )}
+                }
                 <div className={styles.simple_hero}>
                   <h1>{searchParams.category}</h1>
                   <FilterMobile
@@ -89,11 +92,13 @@ const Page = async ({ searchParams, params }: any) => {
                 justifyContent: "center",
               }}
             >
-              <span className="loader"></span> {/* Loader while products are being fetched */}
+              <span className="loader"></span>{" "}
+              {/* Loader while products are being fetched */}
             </div>
           }
         >
-          <ProductsList searchParams={searchParams} /> {/* List of products based on search parameters */}
+          <ProductsList searchParams={searchParams} />{" "}
+          {/* List of products based on search parameters */}
         </Suspense>
       </div>
     </div>

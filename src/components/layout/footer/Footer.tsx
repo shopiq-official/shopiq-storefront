@@ -3,19 +3,26 @@ import { FOOTER_EMAIL, social_media_links } from "@/lib/constants";
 
 import Image from "next/image";
 import styles from "./footer.module.css";
-import logo from "../../../../public/images/logo.png";
 
 import Link from "next/link";
 
 import { getAllStores, getCategories, getCompliance } from "@/api";
 import { Suspense } from "react";
 import { ClientFooter } from "./clientFooter";
+import { Category, Compliance } from "@/types";
 // import { ClientFooter } from "./footerClientPart";
 
-const Footer = async (props: any) => {
+const Footer = async () => {
   const categories = await getCategories();
 
-  const stores = await getAllStores();
+  const stores = (await getAllStores()) as unknown as {
+    addressLine1: string;
+    addressLine2: string;
+    pincode: string;
+    city: string;
+    state: string;
+    country: string;
+  };
 
   const addLine1 = stores?.addressLine1;
   const addLine2 = stores?.addressLine2;
@@ -24,7 +31,9 @@ const Footer = async (props: any) => {
   const state = stores?.state;
   const country = stores?.country;
 
-  const compliance: any = await getCompliance();
+  const compliance = (await getCompliance()) as unknown as {
+    compliances: Compliance[];
+  };
   const complianceList = compliance.compliances;
 
   return (
@@ -32,7 +41,7 @@ const Footer = async (props: any) => {
       <div className={styles.container}>
         <ul className={styles.footer_content}>
           <li className={styles.icon_section}>
-            <Image src={logo} alt="" />
+            <Image src={""} alt="add your logo here" />
             <div className={styles.below_logo}>
               <div className={styles.store}>
                 <h5>VISIT STORE</h5>
@@ -68,7 +77,7 @@ const Footer = async (props: any) => {
             <h4>Categories</h4>
 
             <ul className={styles.list_center} id={styles.cat}>
-              {categories?.slice(0, 5)?.map((nav: any, index: any) => {
+              {categories?.slice(0, 5)?.map((nav: Category, index: number) => {
                 return (
                   <li key={index}>
                     <Link
@@ -85,7 +94,7 @@ const Footer = async (props: any) => {
           <li>
             <h4 style={{ visibility: "hidden" }}>Second </h4>
             <ul className={styles.list_center} id={styles.cat}>
-              {categories?.slice(5, 10)?.map((nav: any, index: any) => {
+              {categories?.slice(5, 10)?.map((nav: Category, index: number) => {
                 return (
                   <li key={index}>
                     <Link

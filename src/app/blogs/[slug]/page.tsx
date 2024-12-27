@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./slug.module.css";
 import axios from "axios";
 import Image from "next/image";
+import { Blog } from "@/types";
 
 const identifier = process.env.NEXT_PUBLIC_IDENTIFIER;
 
 const Page = (props: any) => {
   const [loading, setLoading] = useState(true);
-  const [blog, setBlog]: any = useState({});
+  const [blog, setBlog] = useState<Blog>();
 
   useEffect(() => {
     getBlog();
@@ -18,14 +19,14 @@ const Page = (props: any) => {
     axios({
       method: "GET",
       url:
-        `https://backend.cftcommerce.com/api/blogs/?identifier=${identifier}&slug=` +
+        `https://api.shopiq.app/api/blogs/?identifier=${identifier}&slug=` +
         props?.params?.slug,
     })
-      .then((res: any) => {
+      .then((res: Record<string, any>) => {
         setBlog(res.data.blogs[0]);
         setLoading(false);
       })
-      .catch((err: any) => {});
+      .catch((err: Error) => {});
   };
 
   if (loading)
@@ -46,12 +47,7 @@ const Page = (props: any) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Image
-          src={process.env.NEXT_PUBLIC_IMAGE + blog.image}
-          height={1500}
-          width={1500}
-          alt=""
-        />
+        <Image src={blog?.image || ""} height={1500} width={1500} alt="" />
         <div className={styles.heading}>
           <h1>{blog?.title}</h1>
         </div>
@@ -60,11 +56,16 @@ const Page = (props: any) => {
         <div className={styles.page}>
           <p style={{ color: "grey", paddingBottom: "20px" }}>
             Created At:{" "}
-            {blog.createdAt.split("T")[0].split("-").reverse().join("-")}{" "}
+            {blog?.createdAt &&
+              String(blog.createdAt)
+                .split("T")[0]
+                .split("-")
+                .reverse()
+                .join("-")}{" "}
           </p>
           <div
             dangerouslySetInnerHTML={{
-              __html: blog?.body?.replace(/&nbsp;/g, " "),
+              __html: blog?.body ? blog.body.replace(/&nbsp;/g, " ") : "",
             }}
           ></div>
         </div>

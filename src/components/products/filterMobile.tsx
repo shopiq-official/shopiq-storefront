@@ -1,16 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import styles from "./filterMobile.module.css";
-import { getFilterData } from "@/api";
 import { convertParamsIntoBrowserQuery } from "@/lib/convertParamsIntoBrowserQuery";
 import { useRouter } from "next/navigation";
+import { filterDataProps } from "@/types";
 
-export const FilterMobile = ({ params, filterData }: any) => {
+export const FilterMobile = ({
+  params,
+  filterData,
+}: {
+  params: Record<string, string[] | string | boolean>;
+  filterData: filterDataProps;
+}) => {
+  type dataProp = {
+    _id?: string;
+    options_value?: string[];
+    options_name?: string;
+  };
+
   const [openfilterModal, setopenfilterModal] = useState(false);
   const [smSelected, setSmSelected] = useState<any>(params);
-  const [data, setData]: any = useState({});
+  const [data, setData] = useState<dataProp[]>();
   const [activeFilter, setactiveFilter] = useState<any>(0);
 
   const router = useRouter();
@@ -54,7 +65,7 @@ export const FilterMobile = ({ params, filterData }: any) => {
       },
       {
         _id: "variant-size",
-        options_value: variants.size,
+        options_value: variants?.size,
         options_name: "Size",
       },
       {
@@ -62,17 +73,17 @@ export const FilterMobile = ({ params, filterData }: any) => {
         options_value: collections,
         options_name: "Collections",
       },
-      ...Object.keys(specifications).map((key) => {
+      ...Object.keys(specifications ? specifications : {})?.map((key) => {
         return {
           _id: "specification-" + key,
-          options_value: specifications[key],
+          options_value: specifications && specifications[key],
           options_name: key,
         };
       }),
     ]);
   };
 
-  const handleselect = (e: any) => {
+  const handleselect = (e: React.ChangeEvent<HTMLInputElement>) => {
     var { name, value } = e.target;
 
     // first we will check if the name exists in the smSelected
@@ -83,9 +94,12 @@ export const FilterMobile = ({ params, filterData }: any) => {
         let i = smSelected[name].indexOf(value);
         let temp = smSelected[name];
         temp.splice(i, 1);
-        setSmSelected((prev: any) => ({ ...prev, [name]: temp }));
+        setSmSelected((prev: Record<string, string[]>) => ({
+          ...prev,
+          [name]: temp,
+        }));
       } else {
-        setSmSelected((prev: any) => ({
+        setSmSelected((prev: Record<string, string[]>) => ({
           ...prev,
           [name]: [...prev[name], value],
         }));
@@ -96,11 +110,14 @@ export const FilterMobile = ({ params, filterData }: any) => {
         n = "category";
       }
 
-      setSmSelected((prev: any) => ({ ...prev, [name]: [value] }));
+      setSmSelected((prev: Record<string, string[]>) => ({
+        ...prev,
+        [name]: [value],
+      }));
     }
 
     // let temp = { ...selectedData };
-    let temp: any = {};
+    let temp: Record<string, string[]> = {};
 
     if (e.target.checked) {
       temp[name]
@@ -115,29 +132,38 @@ export const FilterMobile = ({ params, filterData }: any) => {
   };
 
   const displaySmFilter = () => {
-    var filters = data[activeFilter];
-    var filtervalue = filters.options_name;
+    var filters = data && data[activeFilter];
 
     return (
       <div className={styles.new_filter}>
-        {filters?.options_value?.map((val: any, index: any) => {
-          return (
-            <span key={index}>
-              <input
-                type="checkbox"
-                name={data[activeFilter]?._id}
-                value={val}
-                onChange={handleselect}
-                checked={
-                  smSelected[data[activeFilter]?._id]?.includes(val) || false
-                }
-              />
-              <p style={{ textTransform: "capitalize", fontSize: ".9rem" }}>
-                {val}
-              </p>
-            </span>
-          );
-        })}
+        {Array.isArray(filters?.options_value) &&
+          filters?.options_value.length &&
+          filters?.options_value.map((val: string, index: number) => {
+            return (
+              <span key={index}>
+                <input
+                  type="checkbox"
+                  name={
+                    data && typeof data[activeFilter]?._id === "string"
+                      ? data[activeFilter]?._id
+                      : undefined
+                  }
+                  value={val}
+                  onChange={handleselect}
+                  checked={
+                    smSelected[
+                      data && typeof data[activeFilter]?._id === "string"
+                        ? data[activeFilter]._id
+                        : ""
+                    ]?.includes(val) || false
+                  }
+                />
+                <p style={{ textTransform: "capitalize", fontSize: ".9rem" }}>
+                  {val}
+                </p>
+              </span>
+            );
+          })}
       </div>
     );
   };
@@ -167,7 +193,7 @@ export const FilterMobile = ({ params, filterData }: any) => {
                 color: "var(--primary)",
                 fontSize: "1.1rem",
               }}
-              onClick={() => setopenfilterModal((prev: any) => !prev)}
+              onClick={() => setopenfilterModal((prev: boolean) => !prev)}
             >
               CLOSE
             </p>
@@ -196,7 +222,7 @@ export const FilterMobile = ({ params, filterData }: any) => {
       ) : (
         <div
           className={styles.filter_button}
-          onClick={() => setopenfilterModal((prev: any) => !prev)}
+          onClick={() => setopenfilterModal((prev: boolean) => !prev)}
         >
           <span>
             <p>Filter</p>
@@ -214,13 +240,15 @@ export const FilterMobile = ({ params, filterData }: any) => {
           </div>
           <div className={styles.main_filter_container}>
             <div className={styles.filter_items}>
-              {data?.map((val: any, index: any) => {
-                return (
-                  <h5 key={index} onClick={() => setactiveFilter(index)}>
-                    {val?.options_name}
-                  </h5>
-                );
-              })}
+              {data?.map(
+                (val: Record<string, string | string[]>, index: number) => {
+                  return (
+                    <h5 key={index} onClick={() => setactiveFilter(index)}>
+                      {val?.options_name}
+                    </h5>
+                  );
+                }
+              )}
             </div>
 
             <div className={styles.selected_filter}>{displaySmFilter()}</div>

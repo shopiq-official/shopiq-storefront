@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import { getAllProductMedia } from "@/api";
 
 export const metadata: Metadata = {
-  title: "Deals | ENTER_WEBSITE_NAME",
+  title: `Deals | ${process.env.NEXT_PUBLIC_WEBSITE_NAME_FOR_TITLE}`,
   description: "DESCRIPTION",
 };
 
@@ -20,7 +20,7 @@ const Deals = async () => {
       <div className={styles.container}>
         <div className={styles.hero}>Product Videos</div>
         <div className={styles.videos_container}>
-          {medias.map((media: any, index: any) => {
+          {medias.map((media: any, index: number) => {
             return <ImageAndVideoSwitch media={media} key={index} />;
           })}
         </div>

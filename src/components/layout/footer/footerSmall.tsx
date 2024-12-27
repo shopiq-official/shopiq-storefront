@@ -4,8 +4,15 @@ import Link from "next/link";
 import { useState } from "react";
 // import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import DownIcon from "@/assets/Icons/dropDown.svg";
+import { Category } from "@/types";
 
-const FooterSmall = ({ categories, store }: any) => {
+const FooterSmall = ({
+  categories,
+  store,
+}: {
+  categories: Category[];
+  store: any;
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<Number | null>(null);
 
   return (
@@ -51,7 +58,7 @@ const FooterSmall = ({ categories, store }: any) => {
             </span>
             {isDropdownOpen == 2 && (
               <ul className={styles.list_center} key={2} id={styles.cat}>
-                {categories?.map((nav: any, index: any) => {
+                {categories?.map((nav: Category, index: number) => {
                   return (
                     <li key={index}>
                       <Link
