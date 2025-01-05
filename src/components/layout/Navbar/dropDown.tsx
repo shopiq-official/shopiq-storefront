@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./navbar.module.css";
+import { Category } from "@/types";
 
 type Props = {
   title: string;
@@ -17,7 +18,7 @@ export const NavDropDown = ({ title, categories }: Props) => {
         {title}
       </Link>
       <span className={styles.list_items}>
-        {categories?.map((val: any, index: number) => {
+        {categories?.map((val: string, index: number) => {
           return (
             <Link
               aria-label="nav drop menu"

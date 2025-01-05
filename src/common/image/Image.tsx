@@ -2,10 +2,16 @@
 
 import Image from "next/image";
 
-const CardImage = (props: any) => {
+interface ImageProps {
+  src: string;
+  alt: string;
+  className?: string;
+}
+
+const CardImage: React.FC<ImageProps> = (props) => {
   return (
     <Image
-      src={props?.src}
+      src={props?.src || "/placeholder.jpg"}
       alt={props?.alt}
       height={500}
       width={500}

@@ -185,7 +185,8 @@ const Orders = () => {
                               <Image
                                 src={
                                   p_data?.mediaUrl ||
-                                  p_data.productId?.mediaUrl[0]
+                                  p_data.productId?.mediaUrl[0] ||
+                                  "/placeholder.jpg"
                                 }
                                 alt="product Image ..."
                                 height={1500}
@@ -251,7 +252,6 @@ const Orders = () => {
             productId={productid}
             setConfirmCancel={setConfirmCancel}
             UpdateOrderStatus={UpdateOrderStatus}
-            getOrder={() => getOrder()}
           />
         </div>
       )}

@@ -74,7 +74,7 @@ const HomeContentCarousel = ({ data }: Props) => {
                   val?.mediaUrl?.endsWith("jpg") ||
                   val?.mediaUrl?.endsWith("png") ? (
                     <Image
-                      src={val?.mediaUrl}
+                      src={val?.mediaUrl || "/placeholder.jpg"} // Desktop image
                       alt="..."
                       width={1500}
                       height={1500}
@@ -111,7 +111,7 @@ const HomeContentCarousel = ({ data }: Props) => {
                   val?.mediaUrl?.endsWith("jpg") ||
                   val?.mediaUrl?.endsWith("png") ? (
                     <Image
-                      src={val?.mobMediaUrl ?? ""}
+                      src={val?.mobMediaUrl ?? "/placeholder.jpg"} // Mobile image
                       alt="..."
                       width={391}
                       height={695}

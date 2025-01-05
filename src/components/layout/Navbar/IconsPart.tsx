@@ -14,11 +14,19 @@ import BottomNav from "../bottomNav/bottomNav";
 import MobileMenu from "./mobileMenu";
 import { useUTMData } from "@/hooks/utmData";
 import { useUserInfo } from "@/hooks/useUserInfo";
+import { CartState, Category, Product } from "@/types";
 
 const Search = dynamic(() => import("../search/search"));
 const Cart = dynamic(() => import("../cart/cart"));
 
-export const IconsPart = ({ cat, bs, data }: any) => {
+interface IconsPartProps {
+  cat: Category[];
+  bs: Product[];
+  data: Record<string, string[]>;
+}
+
+export const IconsPart = ({ cat, bs, data }: IconsPartProps) => {
+  console.log("cat data", cat);
   useUTMData();
   const { getUserDeviceDetails } = useUserInfo();
   getUserDeviceDetails();
@@ -32,7 +40,7 @@ export const IconsPart = ({ cat, bs, data }: any) => {
   const [cart, setCart] = useState(false);
   const [menu, setMenu] = useState(false);
 
-  const cartLength = useSelector((state: any) => {
+  const cartLength = useSelector((state: CartState) => {
     return state.cart.cart?.length || 0;
   });
 

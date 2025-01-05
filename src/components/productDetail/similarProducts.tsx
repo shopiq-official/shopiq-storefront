@@ -7,7 +7,15 @@ import Image from "next/image";
 import CloseIcon from "@/assets/Icons/cross.svg";
 import { Product } from "@/types";
 
-const SimilarProducts = ({ similarProduct, crossSellProducts }: any) => {
+interface SimilarProductsProps {
+  similarProduct: Product[];
+  crossSellProducts: Product[];
+}
+
+const SimilarProducts = ({
+  similarProduct,
+  crossSellProducts,
+}: SimilarProductsProps) => {
   const [modal, setModal] = useState(false);
   const [section, setSection] = useState(
     similarProduct.length !== 0 ? "similar" : "crosssell"
@@ -60,12 +68,19 @@ const SimilarProducts = ({ similarProduct, crossSellProducts }: any) => {
                 {section == "similar" ? (
                   <>
                     {similarProduct?.length > 0 &&
-                      similarProduct.map((val: any, ind: number) => {
+                      similarProduct.map((val: Product, ind: number) => {
                         return (
-                          <Link href={"/products/" + val?.slug} key={ind}>
+                          <Link
+                            href={"/products/" + val?.seListing?.routeHandle}
+                            key={ind}
+                          >
                             <div className={styles.main_card} key={ind}>
                               <Image
-                                src={val?.mediaUrl[0]}
+                                src={
+                                  val?.mediaUrl
+                                    ? val?.mediaUrl[0]
+                                    : "/placeholder.jpg"
+                                }
                                 alt="products not found"
                                 width={1500}
                                 height={1500}
@@ -80,12 +95,19 @@ const SimilarProducts = ({ similarProduct, crossSellProducts }: any) => {
                 ) : (
                   <>
                     {crossSellProducts?.length > 0 &&
-                      crossSellProducts.map((val: any, ind: number) => {
+                      crossSellProducts.map((val: Product, ind: number) => {
                         return (
-                          <Link href={"/products/" + val?.slug} key={ind}>
+                          <Link
+                            href={"/products/" + val?.seListing?.routeHandle}
+                            key={ind}
+                          >
                             <div className={styles.main_card} key={ind}>
                               <Image
-                                src={val?.mediaUrl[0]}
+                                src={
+                                  val.mediaUrl
+                                    ? val?.mediaUrl[0]
+                                    : "/placeholder.jpg"
+                                }
                                 alt="products not found"
                                 width={1500}
                                 height={1500}

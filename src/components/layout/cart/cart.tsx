@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import CartProductList from "./cartProductList";
 import { getDiscountsApi, handlePaymentApi, placeOrder } from "@/api";
 import { keyContextProps, useKeyContext } from "@/providers/keyProvider";
-import { CartProduct, CartProductVariant, Discount, variantProp } from "@/types";
+import { CartProduct, CartProductVariant, CartState, Discount, variantProp } from "@/types";
 
 type Props = {
   open: boolean;
@@ -27,7 +27,7 @@ const Cart = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const cart = useSelector((state: any) => state.cart.cart);
+  const cart = useSelector((state: CartState) => state.cart.cart);
 
   const emptyCart = () => {};
 

@@ -1,4 +1,4 @@
-import { Collection, Contact } from "@/types";
+import { Collection, Contact, Order } from "@/types";
 import axios from "axios";
 
 const identifier = process.env.NEXT_PUBLIC_IDENTIFIER;
@@ -20,7 +20,7 @@ type ObjProp = {
   headers?: any;
 };
 
-const api = (props: Props) => {
+export const api = (props: Props) => {
   const obj: ObjProp = {
     url: baseUrl + props.url,
     method: props.method,
@@ -53,15 +53,17 @@ export const getCollections = async () => {
   }
 };
 
-export const getCategoriesOfType = async () => {
+export const getCategoriesOfType = async (): Promise<
+  Record<string, string[]>
+> => {
   let response = await fetch(
     `${baseUrl}products/getUniqueCategories?identifier=${identifier}`,
     { next: { tags: ["products", "category"] } }
   );
 
   response = await response.json();
-
-  return response;
+  console.log("response", response);
+  return response as unknown as Record<string, string[]>;
 };
 
 export const getContent = async () => {
@@ -146,7 +148,7 @@ export const getCategories = async () => {
       { next: { tags: ["category"] } }
     );
     let data = await res.json();
-    return data.productCategories;
+    return data.productCategorys;
   } catch (err) {
     return [];
   }
@@ -177,7 +179,14 @@ export const getFilterData = async () => {
 
   res = await res.json();
 
-  return res;
+  return res as unknown as {
+    msg?: string;
+    categories: string[];
+    collections: string[];
+    maxPrice?: number;
+    minPrice?: number;
+    [key: string]: any;
+  };
 };
 
 export const getKey = async () => {
@@ -345,7 +354,7 @@ export const getSimilarProductData = async (cat: string, type: string) => {
 };
 
 export const placeOrder = async (data: any) => {
-  const body = {
+  const body: any = {
     ...data,
     identifier,
   };

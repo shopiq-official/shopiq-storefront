@@ -19,19 +19,15 @@ const PrevButton = dynamic(
   () => import("../../../common/carousels/buttons/prevBtn")
 );
 
-const CategoryCarousel = ({
-  data,
-  type,
-}: {
-  data: Category[];
-  type?: string;
-}) => {
+const CategoryCarousel = ({ data }: { data: Category[] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { align: "start", loop: true },
     [Autoplay()]
   );
   //  console.log(data)
   const { onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi);
+
+  console.log(data);
 
   return (
     <section className={styles.embla}>
@@ -52,7 +48,7 @@ const CategoryCarousel = ({
                       src={
                         (Array.isArray(val?.media2) &&
                           val?.media2[0]?.mediaUrl) ||
-                        ""
+                        "/placeholder.jpg"
                       }
                       width={1500}
                       height={1500}
@@ -67,7 +63,7 @@ const CategoryCarousel = ({
           })}
         </div>
       </div>
-      {data.length >= 4 && (
+      {data?.length >= 4 && (
         <div className={styles.embla__controls}>
           <div className={styles.embla__buttons}>
             <PrevButton onClick={onPrevButtonClick} />

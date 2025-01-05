@@ -24,7 +24,7 @@ async function Collections() {
                   aria-label="products collections"
                 >
                   <Image
-                    src={val?.media[0]?.mediaUrl}
+                    src={val?.media[0]?.mediaUrl ?? "/placeholder.jpg"}
                     alt="..."
                     height={1500}
                     width={1500}

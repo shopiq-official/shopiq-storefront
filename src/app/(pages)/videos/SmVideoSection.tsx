@@ -19,7 +19,6 @@ const SmVideoSection = ({ vid, index }: any) => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         loadVideo();
-       
       } else {
         handleVideoPause();
       }
@@ -75,7 +74,7 @@ const SmVideoSection = ({ vid, index }: any) => {
       <div className={styles.vd} id="video">
         <Image
           ref={imageRef}
-          src={vid?.productImageUrl}
+          src={vid?.productImageUrl || "/placeholder.jpg"}
           alt=""
           width={1179}
           height={2556}

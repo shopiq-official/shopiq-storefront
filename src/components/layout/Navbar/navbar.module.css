@@ -1,6 +1,6 @@
 .container,
 .container_two {
-  height: 96.5px;
+  /* height: 96.5px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,6 +25,43 @@
   border-bottom: 1px solid rgba(16, 25, 53, 0.1);
   justify-content: space-between;
   padding-inline: var(--margin-inline-laptop);
+  align-items: center;
+}
+
+.location {
+  /* width: 30vw; */
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  color: grey;
+  font-size: 1rem;
+  justify-self: left;
+  /* border: 1px solid red; */
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.location span {
+  display: flex;
+}
+
+.location h3 {
+  font-size: 0.9rem;
+  color: grey;
+  font-weight: 300;
+}
+
+.location h5 {
+  /* color: var(--primary); */
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+.location svg {
+  height: 12px;
+  width: 12px;
 }
 
 .navmenu {
@@ -37,7 +74,7 @@
 .navmenu ul {
   display: flex;
   gap: 1vw;
-  color: var(--primary);
+
   list-style-type: none;
   /* border: 1px solid red; */
 }
@@ -45,7 +82,30 @@
   font-size: 1.1rem;
   cursor: pointer;
   width: fit-content;
+  position: relative;
+  padding-inline: 5px;
 }
+.navmenu li:hover {
+  color: var(--primary);
+}
+
+.navmenu li::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px; /* Underline height */
+  background-color: var(--primary); /* Underline color */
+  transition: width 0.3s ease; /* Transition effect on width change */
+}
+.navmenu li:hover::before {
+  width: 100%;
+}
+.nav_link:hover .nav_item {
+  color: var(--primary);
+}
+
 .dropdown {
   position: relative;
 }
@@ -119,7 +179,7 @@
   justify-content: center;
 }
 .logo_container img {
-  height: 60px;
+  height: 55px;
   width: auto;
   /* border: 1px solid green; */
 }
@@ -154,6 +214,13 @@
   display: none;
 }
 
+.location_for_mob {
+  display: none;
+}
+.mob_location {
+  display: none;
+}
+
 @media screen and (max-width: 1024px) {
   .nav_second_row a {
     font-size: 0.9rem;
@@ -163,6 +230,9 @@
 @media screen and (max-width: 768px) {
   .nav_second_row a {
     font-size: 0.7rem;
+  }
+  .mob_location {
+    display: block;
   }
 }
 
@@ -197,6 +267,10 @@
     justify-content: flex-start;
   }
 
+  .logo_container img {
+    height: 45px;
+    width: auto;
+  }
   .menu_icon {
     display: block;
     height: 17px !important;
@@ -266,6 +340,32 @@
   .cart,
   .search {
     display: none;
+  }
+  .menu_location {
+    display: none !important;
+  }
+
+  .location {
+    display: none;
+  }
+
+  .location_for_mob {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    padding: 3px 5vw;
+    gap: 10px;
+    z-index: 9997;
+    background-color: white;
+  }
+
+  .location_for_mob h3 {
+    width: fit-content;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    font-weight: 400;
   }
 }
 @media (min-width: 1800px) {

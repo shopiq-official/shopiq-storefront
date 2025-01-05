@@ -17,3 +17,5 @@ export function makeStore(preloadedState?: any) {
 const store = makeStore();
 
 export default store;
+
+export const AppDispatch = typeof store.dispatch;

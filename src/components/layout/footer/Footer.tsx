@@ -41,7 +41,15 @@ const Footer = async () => {
       <div className={styles.container}>
         <ul className={styles.footer_content}>
           <li className={styles.icon_section}>
-            <Image src={""} alt="add your logo here" />
+            <Image
+              src={
+                process.env.NEXT_PUBLIC_IMAGE_PLACEHOLDER_URL ||
+                "/placeholder.jpg"
+              }
+              alt="add your logo here"
+              height={500}
+              width={500}
+            />
             <div className={styles.below_logo}>
               <div className={styles.store}>
                 <h5>VISIT STORE</h5>

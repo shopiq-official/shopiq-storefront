@@ -11,11 +11,12 @@ import ReelIcon from "@/assets/Icons/nav/reels.svg";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { CartState } from "@/types";
 
 const BottomNav = ({ cartLength, OpenCart, openSearch }: any) => {
   const router = useRouter();
   const pathname = usePathname();
-  const cart = useSelector((state: any) => state.cart.cart.length);
+  const cart = useSelector((state: CartState) => state.cart.cart.length);
 
   const handleCart = () => {
     OpenCart(true);

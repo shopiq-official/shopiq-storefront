@@ -1,12 +1,12 @@
-import { ProductCard } from "@/common/productCard/productCard";
-import styles from "./productList.module.css";
 import { getProductByFilter } from "@/api";
+import { ProductCard } from "@/common/productCard/productCard";
 import { convertParamsIntoQuery } from "@/lib/convertParamsIntoQuery";
-import { LoadMoreBtn } from "./loadingMoreBtn";
 import { Product } from "@/types";
+import { LoadMoreBtn } from "./loadingMoreBtn";
+import styles from "./productList.module.css";
 
 const handleProductFilter = async (
-  params: Record<string, string | string[]>
+  params: Record<string, string | string[] | number | boolean>
 ) => {
   let products = [];
 
@@ -29,7 +29,7 @@ const handleProductFilter = async (
 const ProductsList = async ({
   searchParams,
 }: {
-  searchParams: Record<string, string | string[]>;
+  searchParams: Record<string, string | string[] | number | boolean>;
 }) => {
   // console.log(searchParams);
   const { products, total } = (await handleProductFilter(

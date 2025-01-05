@@ -1,8 +1,5 @@
 import {
   getBestSeller,
-  getByProductCategory,
-  getByProductType,
-  getCategories,
   getContent,
   getDiscountsApi,
   getFeatured,
@@ -13,7 +10,6 @@ import { Suspense } from "react";
 
 import FullWidthCarousel from "@/common/carousels/FullWidthCarousel/fullWidthCarousel";
 import dynamic from "next/dynamic";
-import DealsSection from "@/components/Homepage/dealsSection";
 
 import CategorySection from "@/components/Homepage/category/categorySection";
 import { Content, Product } from "@/types";
@@ -50,6 +46,9 @@ const getHomeData = async () => {
 const Page = async () => {
   const data = await getHomeData();
 
+  // console.log(data);
+  console.log(data?.contents?.hero);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "5vh" }}>
       {data?.contents && data?.contents?.hero?.length && (
@@ -57,30 +56,29 @@ const Page = async () => {
       )}
 
       <CategorySection />
-      <div>
-        {data?.featured?.length > 0 && (
-          <CarouselWithTabs
-            title="Top picks for your pet!"
-            description={"Lorem ipsum doror samet"}
-            data={data?.featured}
-            link={"/products?isFeatured=true"}
-          />
-        )}
-        {data?.contents && <HomeContentOne />}
 
-        <DealsSection />
+      {data?.featured?.length > 0 && (
+        <CarouselWithTabs
+          title="Raw Products for you!"
+          description={"Lorem ipsum doror samet"}
+          data={data?.featured}
+          link={"/products?isFeatured=true"}
+        />
+      )}
+      {data?.contents && <HomeContentOne />}
 
-        {data?.bestSeller?.length > 0 && (
-          <CarouselWithTabs
-            title="Pets love these picks! "
-            description={"Lorem ipsum doror samet"}
-            data={data?.bestSeller}
-            link={"/products?bestSeller=true"}
-          />
-        )}
+      {/* <DealsSection /> */}
 
-        {data?.contents && <HomeContentTwo />}
-      </div>
+      {data?.bestSeller?.length > 0 && (
+        <CarouselWithTabs
+          title="Most popular products near you!"
+          description={"Lorem ipsum doror samet"}
+          data={data?.bestSeller}
+          link={"/products?bestSeller=true"}
+        />
+      )}
+
+      {/* {data?.contents && <HomeContentTwo />} */}
     </div>
   );
 };

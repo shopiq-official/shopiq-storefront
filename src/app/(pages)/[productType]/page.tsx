@@ -10,11 +10,13 @@ import {
   getFilterData,
 } from "@/api";
 import Image from "next/image";
-import { Category, Collection, filterDataProps } from "@/types";
+import { Category, Collection } from "@/types";
 
 export async function generateStaticParams() {
-  const categories: Record<string, string[]> = await getCategoriesOfType();
+  const response = await getCategoriesOfType();
+  const categories = response;
 
+  console.log("Cateee", categories);
   let all_values = [];
   const p_types = Object.keys(categories).filter((val) => val);
 
@@ -58,7 +60,7 @@ const Page = async ({
 }) => {
   // Fetch categories and filter data
   const category: Category[] = await getCategories();
-  const filterData: filterDataProps = await getFilterData();
+  const filterData = await getFilterData();
   const collection: Collection[] = await getCollections();
   let type = "";
 
@@ -147,7 +149,7 @@ const Page = async ({
                 {
                   <div className={styles.banner}>
                     <Image
-                      src={mediaUrl || ""}
+                      src={mediaUrl || "/placeholder.jpg"}
                       width={1000}
                       height={400}
                       alt=""

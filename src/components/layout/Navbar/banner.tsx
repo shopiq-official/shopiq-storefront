@@ -4,8 +4,9 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Discount } from "@/types";
 
-const Banners = ({ data }: any) => {
+const Banners: React.FC<{ data: Discount[] }> = ({ data }) => {
   const pathname = usePathname();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000 }),
@@ -25,7 +26,7 @@ const Banners = ({ data }: any) => {
     <div className={styles.nav_first_row}>
       <div className={styles.embla_viewport} ref={emblaRef}>
         <div className={styles.embla__container}>
-          {data.map((val: any, index: number) => (
+          {data.map((val: Discount, index: number) => (
             <div className={styles.embla__slide} key={index}>
               <div className={styles.event_carousel_image}>
                 <div className={styles.overlay_text}>

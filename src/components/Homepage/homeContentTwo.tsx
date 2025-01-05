@@ -25,14 +25,14 @@ const HomeContentTwo = async () => {
           style={{ cursor: "pointer" }}
         >
           <Image
-            src={banner2[0]?.mediaUrl}
+            src={banner2[0]?.mediaUrl ?? "/placeholder.jpg"}
             alt="banner 1"
             width={1500}
             height={1500}
             className="image_for_desktop"
           />
           <Image
-            src={banner2[0]?.mobMediaUrl}
+            src={banner2[0]?.mobMediaUrl ?? "/placeholder.jpg"}
             alt="banner 1"
             width={1500}
             height={1500}
@@ -44,14 +44,14 @@ const HomeContentTwo = async () => {
     return (
       <div className={styles.static_section}>
         <Image
-          src={banner2[0]?.mediaUrl}
+          src={banner2[0]?.mediaUrl ?? "/placeholder.jpg"}
           alt="banner 1"
           width={1500}
           height={1500}
           className="image_for_desktop"
         />
         <Image
-          src={banner2[0]?.mobMediaUrl}
+          src={banner2[0]?.mobMediaUrl ?? "/placeholder.jpg"}
           alt="banner 1"
           width={1500}
           height={1500}

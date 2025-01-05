@@ -137,7 +137,7 @@ export default async function Page({
                 <div className={styles.epc_container} key={index}>
                   <div>
                     <Image
-                      src={val?.mediaUrl ?? ""}
+                      src={val?.mediaUrl ?? "/placeholder.jpg"}
                       height={2000}
                       width={2000}
                       alt=".."

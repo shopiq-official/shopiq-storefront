@@ -10,7 +10,7 @@ export const FilterMobile = ({
   params,
   filterData,
 }: {
-  params: Record<string, string[] | string | boolean>;
+  params: Record<string, string[] | string | boolean | number>;
   filterData: filterDataProps;
 }) => {
   type dataProp = {

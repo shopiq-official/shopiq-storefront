@@ -17,7 +17,15 @@ const Page = async ({
 }) => {
   // Fetching categories and filter data from the API
   const category = await getCategories();
-  const filterData = await getFilterData();
+  const filterData = (await getFilterData()) as unknown as {
+    msg?: string;
+    categories: string[];
+    collections: string[];
+    maxPrice: number;
+    minPrice: number;
+  };
+
+  // console.log("filter Data", search);
 
   const selectedCategory = category.find(
     (v: Category) =>
@@ -46,7 +54,7 @@ const Page = async ({
                 {
                   <div className={styles.banner}>
                     <Image
-                      src={mediaUrl || ""} // Image URL
+                      src={mediaUrl || "/placeholder.jpg"} // Image URL
                       width={1000}
                       height={400}
                       alt="" // Alt text should be descriptive for accessibility

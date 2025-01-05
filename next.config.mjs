@@ -20,6 +20,11 @@ const nextConfig = {
         hostname: "dbxtdwj4gd9ez.cloudfront.net",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "media.istockphoto.com",
+        port: "",
+      },
     ],
   },
   webpack(config) {

@@ -67,12 +67,12 @@ const FullWidthCarousel = ({ data }: { data: Hero[] }) => {
 
                 {val.mediaUrl && (
                   <div className={styles.more_than_700}>
-                    {val?.mediaUrl.split(".")[1] == "webp" ||
-                    val?.mediaUrl.split(".")[1] == "jpeg" ||
-                    val?.mediaUrl.split(".")[1] == "jpg" ||
-                    val?.mediaUrl.split(".")[1] == "png" ? (
+                    {val?.mediaUrl.endsWith("webp") ||
+                    val?.mediaUrl.endsWith("jpeg") ||
+                    val?.mediaUrl.endsWith("jpg") ||
+                    val?.mediaUrl.endsWith("png") ? (
                       <Image
-                        src={val?.mediaUrl}
+                        src={val?.mediaUrl || "/placeholder.jpg"}
                         alt="..."
                         width={1500}
                         height={1500}
@@ -108,12 +108,12 @@ const FullWidthCarousel = ({ data }: { data: Hero[] }) => {
 
                 {val.mobMediaUrl && (
                   <div className={styles.less_than_700}>
-                    {val?.mobMediaUrl.split(".")[1] == "webp" ||
-                    val?.mobMediaUrl.split(".")[1] == "jpeg" ||
-                    val?.mobMediaUrl.split(".")[1] == "jpg" ||
-                    val?.mobMediaUrl.split(".")[1] == "png" ? (
+                    {val?.mobMediaUrl.endsWith("webp") ||
+                    val?.mobMediaUrl.endsWith("jpeg") ||
+                    val?.mobMediaUrl.endsWith("jpg") ||
+                    val?.mobMediaUrl.endsWith("png") ? (
                       <Image
-                        src={val?.mobMediaUrl}
+                        src={val?.mobMediaUrl || "/placeholder.jpg"}
                         alt="..."
                         width={391}
                         height={695}

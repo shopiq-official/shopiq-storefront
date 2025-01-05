@@ -9,23 +9,24 @@ import SearchIcon from "@/assets/Icons/nav/search.svg";
 import axios from "axios";
 import { capitalize } from "@/lib/capitalize";
 import { searchProducts } from "@/api";
+import { Category, Product } from "@/types";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  categories: any;
-  bestSeller: any;
+  categories: Category[];
+  bestSeller: Product[];
 };
 
 const Search = (props: Props) => {
   const [search, setSearch] = React.useState("");
-  const [results, setResults]: any = React.useState([]);
+  const [results, setResults] = React.useState<Product[]>([]);
   const initialLoad = useRef(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    let delayDebounceFn: any;
+    let delayDebounceFn: ReturnType<typeof setTimeout>;
     if (initialLoad.current) {
       delayDebounceFn = setTimeout(() => {
         getData();
@@ -40,7 +41,7 @@ const Search = (props: Props) => {
   const getData = () => {
     if (search !== "") {
       searchProducts(search)
-        .then((res: any) => {
+        .then((res: Record<string, any>) => {
           setResults(res.data);
         })
         .catch((err: Error) => {});
@@ -87,7 +88,7 @@ const Search = (props: Props) => {
                     className={styles.default_categories}
                     onClick={() => props.onClose()}
                   >
-                    {props.categories?.map((val: any, ind: number) => {
+                    {props.categories?.map((val: Category, ind: number) => {
                       return (
                         <p
                           key={ind}
@@ -107,7 +108,7 @@ const Search = (props: Props) => {
                     className={styles.trending_now}
                     onClick={() => props.onClose()}
                   >
-                    {props.bestSeller?.map((val: any, ind: number) => {
+                    {props.bestSeller?.map((val: Product, ind: number) => {
                       return (
                         <div
                           onClick={() => {
@@ -119,8 +120,12 @@ const Search = (props: Props) => {
                           key={ind}
                         >
                           <Image
-                            src={val.mediaUrl[0]}
-                            alt={val?.title}
+                            src={
+                              val?.mediaUrl
+                                ? val.mediaUrl[0]
+                                : "/placeholder.jpg"
+                            }
+                            alt={val?.title ?? ""}
                             height={1500}
                             width={1500}
                           />
@@ -131,9 +136,9 @@ const Search = (props: Props) => {
                               // gap: "4px",
                             }}
                           >
-                            <p>{capitalize(val.category)}</p>
-                            <h5 key={ind}>{capitalize(val?.title)}</h5>
-                            <h4>Rs {val.pricing.price}</h4>
+                            <p>{capitalize(val.category ?? "-")}</p>
+                            <h5 key={ind}>{capitalize(val?.title ?? "-")}</h5>
+                            <h4>Rs {val?.pricing?.price}</h4>
                           </div>
                         </div>
                       );
@@ -143,20 +148,31 @@ const Search = (props: Props) => {
               </div>
             ) : (
               <ul>
-                {results.map((item: any, index: number) => {
+                {results.map((item: Product, index: number) => {
                   return (
                     <li
                       key={index}
                       onClick={() => {
                         props.onClose();
-                        router.push(`/products/${item.seListing.routeHandle}`);
+                        router.push(
+                          `/products/${item?.seListing?.routeHandle}`
+                        );
                       }}
                     >
-                      <img src={`${item?.mediaUrl[0]}`} alt="" />
+                      <Image
+                        src={
+                          item?.mediaUrl
+                            ? `${item?.mediaUrl[0]}`
+                            : "/placeholder.jpg"
+                        }
+                        alt=""
+                        height={500}
+                        width={500}
+                      />
                       <div>
-                        <h3>{capitalize(item?.title)}</h3>
-                        <h4>{capitalize(item.category)}</h4>
-                        <p>₹{item.pricing.price}</p>
+                        <h3>{capitalize(item?.title ?? "- ")}</h3>
+                        <h4>{capitalize(item.category ?? "-")}</h4>
+                        <p>₹{item.pricing?.price}</p>
                       </div>
                     </li>
                   );

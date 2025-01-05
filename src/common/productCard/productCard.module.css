@@ -27,6 +27,7 @@
 
 .cardImageMultiple .img2 {
   opacity: 0;
+  border-radius: 10px;
 }
 
 .cardImageMultiple img {
@@ -38,13 +39,14 @@
 }
 
 .cardImageMultiple .img1 {
-  optacity: 1;
+  opacity: 1;
 }
 
 .img1 {
   position: absolute;
   top: 0px;
   left: 0px;
+  border-radius: 10px;
 }
 
 .card_main:hover > .cardImageMultiple .img1 {

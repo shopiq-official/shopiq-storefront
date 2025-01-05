@@ -7,6 +7,7 @@ import { getProductById } from "@/api";
 import "@splidejs/react-splide/css";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Product } from "@/types";
 
 const ProductCard = ({ products, shopBtn = true }: any) => {
   const [data, setData]: any = useState([]);
@@ -29,8 +30,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
     setData(temp);
   };
 
-  if (data.length === 0 || data.filter((val: any) => val).length === 0)
-    return <></>;
+  if (data.length === 0) return <></>;
 
   return (
     <div
@@ -49,7 +49,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
           pagination: true,
         }}
       >
-        {data.map((product: any, index: number) => {
+        {data.map((product: Product, index: number) => {
           console.log(product);
           return (
             <SplideSlide key={index}>
@@ -70,7 +70,11 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
               >
                 <div className={styles.product_image_and_text_gap}>
                   <Image
-                    src={product?.mediaUrl[0]}
+                    src={
+                      product.mediaUrl
+                        ? product?.mediaUrl[0]
+                        : "/placeholder.jpg"
+                    }
                     alt="..."
                     style={{
                       height: "70px",

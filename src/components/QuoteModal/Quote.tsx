@@ -1,14 +1,20 @@
 "use client";
 
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import styles from "./Quote.module.css";
 import { RxCross2 } from "react-icons/rx";
 import api, { submitContact } from "@/api";
 import toast from "react-hot-toast";
-import axios from '@/api';
+import { Product } from "@/types";
 
-const Quote = ({ product, quantity, close }: any) => {
+interface QuoteProps {
+  product?: string;
+
+  close: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Quote = ({ product, close }: QuoteProps) => {
   // console.log(product);
   const [contactdata, setContactData] = useState<any>({
     identifier: "YOUR_IDENTIFIER",
@@ -22,16 +28,16 @@ const Quote = ({ product, quantity, close }: any) => {
       agree: "true",
       date: new Date(),
     },
-    typeName:"deals",
+    typeName: "deals",
     userDeviceDetails: JSON.parse(
       localStorage.getItem("userDeviceDetails") || "{}"
     ),
-     createdAt: new Date(),
+    createdAt: new Date(),
     campaign: JSON.parse(localStorage.getItem("campaign") || "{}"),
   });
   const sendContact = async () => {
     try {
-      const res=await submitContact(contactdata)
+      const res = await submitContact(contactdata);
       // console.log(res);
       toast.success("Contact Saved");
       close(false);
@@ -41,7 +47,7 @@ const Quote = ({ product, quantity, close }: any) => {
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name == "date") {
       setContactData({
@@ -54,7 +60,7 @@ const Quote = ({ product, quantity, close }: any) => {
     }
   };
   function disablePastDates() {
-    var today: any = new Date();
+    var today: Date | string = new Date();
     var dd = String(today.getDate()).padStart(2, "0");
     var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     var yyyy = today.getFullYear();
@@ -142,10 +148,7 @@ const Quote = ({ product, quantity, close }: any) => {
     </div>
   );
 
-  return ReactDOM.createPortal(
-    modalContent,
-    document.body
-  );
+  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default Quote;

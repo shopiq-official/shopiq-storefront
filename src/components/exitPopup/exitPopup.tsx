@@ -6,7 +6,10 @@ import CloseIcon from "@/assets/Icons/cross.svg";
 import styles from "./exitPopup.module.css";
 import { submitContact } from "@/api";
 
-const ExitPopup = ({ open }: { open: any }) => {
+interface childProp {
+  open: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const ExitPopup: React.FC<childProp> = ({ open }) => {
   const [email, setEmail] = useState("");
 
   const handleShow = () => {
@@ -20,7 +23,7 @@ const ExitPopup = ({ open }: { open: any }) => {
       try {
         const res = await submitContact({
           personalEmail: email,
-          identifier: process.env.NEXT_PUBLIC_IDENTIFIER,
+          identifier: process.env.NEXT_PUBLIC_IDENTIFIER ?? "",
         });
         open(false);
       } catch (error) {
@@ -57,7 +60,12 @@ const ExitPopup = ({ open }: { open: any }) => {
               <CloseIcon className={styles.mob_close_icon} />
             </span>
           </span>
-          <Image src={""} alt="..." />
+          <Image
+            src={"/placeholder.jpg"}
+            alt="..."
+            height={1000}
+            width={1000}
+          />
         </div>
       </div>
     </div>

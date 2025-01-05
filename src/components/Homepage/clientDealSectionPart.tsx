@@ -128,7 +128,7 @@ const ClientDealSectionPart = ({ data }: any) => {
               >
                 {!videoPlaying[index] && (
                   <Image
-                    src={media?.productImageUrl}
+                    src={media?.productImageUrl || "/placeholder.jpg"} // Display product image
                     alt=""
                     height={563}
                     width={1000}
@@ -170,7 +170,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
   const router = useRouter();
 
   useEffect(() => {
-    getProductsData(); // Fetch product data on component mount
+    getProductsData();
   }, []);
 
   const getProductsData = async () => {
@@ -186,8 +186,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
     setData(temp); // Update state with fetched products
   };
 
-  if (data.length === 0 || data.filter((val: any) => val).length === 0)
-    return <></>; // Return empty if no data
+  if (data.length === 0) return <></>; // Return empty if no data
 
   return (
     <div
@@ -230,7 +229,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
                     width={100}
                     height={100}
                     alt=""
-                    src={product?.mediaUrl[0]} // Display product image
+                    src={product?.mediaUrl[0] || "/placeholder.jpg"} // Display product image
                   />
 
                   <div style={{ lineHeight: ".9rem" }}>

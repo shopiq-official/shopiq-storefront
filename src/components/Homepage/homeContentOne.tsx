@@ -14,14 +14,14 @@ const HomeContentOne = async () => {
     return (
       <Link className={styles.static_section} href={banner1[0]?.onClickUrl}>
         <Image
-          src={banner1[0]?.mediaUrl ?? ""}
+          src={banner1[0]?.mediaUrl ?? "/placeholder.jpg"}
           alt="banner 1"
           width={1500}
           height={1500}
           className="image_for_desktop"
         />
         <Image
-          src={banner1[0]?.mobMediaUrl ?? ""}
+          src={banner1[0]?.mobMediaUrl ?? "/placeholder.jpg"}
           alt="banner 1"
           width={1500}
           height={1500}
@@ -33,14 +33,14 @@ const HomeContentOne = async () => {
   return (
     <div className={styles.static_section}>
       <Image
-        src={banner1[0]?.mediaUrl ?? ""}
+        src={banner1[0]?.mediaUrl ?? "/placeholder.jpg"}
         alt="banner 1"
         width={1500}
         height={1500}
         className="image_for_desktop"
       />
       <Image
-        src={banner1[0]?.mobMediaUrl ?? ""}
+        src={banner1[0]?.mobMediaUrl ?? "/placeholder.jpg"}
         alt="banner 1"
         width={1500}
         height={1500}

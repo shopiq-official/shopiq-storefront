@@ -3,9 +3,15 @@ import Link from "next/link";
 import styles from "./productCard.module.css";
 import { Suspense, useState } from "react";
 import CardImage from "../image/Image";
+import { Product } from "@/types";
 
-export const ProductCard = ({ data }: any) => {
-  const multipleImages = data?.mediaUrl?.length > 1;
+interface childProp {
+  data: Product;
+}
+
+export const ProductCard: React.FC<childProp> = ({ data }) => {
+  const multipleImages =
+    data?.mediaUrl && data?.mediaUrl?.length > 1 ? true : false;
 
   return (
     <Link
@@ -18,7 +24,9 @@ export const ProductCard = ({ data }: any) => {
           <div className={styles.cardImage}>
             <Suspense fallback={<p>Loading......</p>}>
               <CardImage
-                src={`${data?.mediaUrl[0]}`}
+                src={
+                  data?.mediaUrl ? `${data?.mediaUrl[0]}` : "/placeholder.jpg"
+                }
                 alt="..."
                 className={styles.img1}
               />
@@ -28,12 +36,12 @@ export const ProductCard = ({ data }: any) => {
         {multipleImages && (
           <div className={styles.cardImageMultiple}>
             <CardImage
-              src={`${data?.mediaUrl[0]}`}
+              src={data?.mediaUrl ? `${data?.mediaUrl[0]}` : "/placeholder.jpg"}
               alt="..."
               className={styles.img1}
             />
             <CardImage
-              src={`${data?.mediaUrl[1]}`}
+              src={data?.mediaUrl ? `${data?.mediaUrl[1]}` : "/placeholder.jpg"}
               alt="..."
               className={styles.img2}
             />

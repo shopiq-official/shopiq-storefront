@@ -1,17 +1,17 @@
 "use client";
 
-import styles from "./cartProductList.module.css";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Delete from "@/assets/Icons/trash.svg";
 import Add from "@/assets/Icons/add.svg";
 import Minus from "@/assets/Icons/minus.svg";
-import { useDispatch, useSelector } from "react-redux";
+import Delete from "@/assets/Icons/trash.svg";
+import { calculateAdvancePricing } from "@/lib/calcPrice";
 import { capitalize } from "@/lib/capitalize";
 import { numToString } from "@/lib/numToString";
 import { deleteCartItem, updateCart } from "@/redux/cart.slice";
-import { calculateAdvancePricing } from "@/lib/calcPrice";
 import { CartProduct, CartProductVariant } from "@/types";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import styles from "./cartProductList.module.css";
 
 const CartProductList = ({
   item,
@@ -42,13 +42,18 @@ const CartProductList = ({
       <div className={styles.left}>
         <div className={styles.img}>
           <Image
-            src={`${item.mediaUrl}`}
+            src={
+              // `${item.mediaUrl}` ||
+              "/placeholder.jpg"
+            }
             alt={item?.productId?.title ?? ""}
-            fill={true}
+            // fill={true}
+            height={500}
+            width={500}
           />
         </div>
         <div className={styles.about_product}>
-          <p className={styles.product_category}>{item.productId.category}</p>
+          <p className={styles.product_category}>{item.productId?.category}</p>
           <h2>{capitalize(item?.productId?.title ?? "")}</h2>
           {item?.variant?.length !== 0 && (
             <ul className={styles.variants}>

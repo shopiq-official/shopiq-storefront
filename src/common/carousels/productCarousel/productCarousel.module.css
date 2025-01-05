@@ -62,4 +62,8 @@
   .embla {
     --slide-size: 50%;
   }
+
+  .embla__controls {
+    display: none;
+  }
 }

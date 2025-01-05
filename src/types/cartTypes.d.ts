@@ -26,3 +26,13 @@ export interface Cart {
   addedFrom?: string;
   products: CartProduct[];
 }
+
+export interface CartState {
+  cart: {
+    cart: CartProduct[];
+    cartId: string | number | null;
+    error: boolean | null;
+    status: string;
+  };
+  retaino: { state: string };
+}

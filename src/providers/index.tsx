@@ -16,7 +16,7 @@ const ExitProvider = dynamic(() => import("./exitProvider"), { ssr: false });
 // - Context Api
 // - Redux
 
-const Providers = ({ children }: any) => {
+const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <RecoilRoot>
       <Provider store={store}>

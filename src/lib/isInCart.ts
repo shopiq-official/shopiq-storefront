@@ -1,11 +1,15 @@
+import { Cart, CartProduct, CartProductVariant, Product } from "@/types";
+
 export const isInCart = (
-  cart: any,
-  product: any,
-  variants: any,
-  quantity: any
+  cart: Record<string, CartProduct[]>,
+  product: Partial<Product>,
+  variants: CartProductVariant,
+  quantity?: number
 ) => {
   // check product exists with same id :
-  let found = cart.cart.filter((val: any) => val.productId._id === product._id);
+  let found = cart.cart.filter(
+    (val: CartProduct) => val.productId._id === product._id
+  );
 
   if (found.length !== 0) {
     // means exists in it
@@ -15,12 +19,13 @@ export const isInCart = (
     }
 
     // lets create a object from found value
-    let new_obj: any = {};
+    let new_obj: Record<string, string[] | string | undefined> = {};
 
-    found[0].variant.forEach((val: any) => {
-      new_obj[val.options_name] = Array.isArray(val.options_value)
-        ? val.options_value[0]
-        : val.options_value;
+    found[0].variant?.forEach((val: CartProductVariant) => {
+      val.options_name &&
+        (new_obj[val.options_name] = Array.isArray(val.options_value)
+          ? val.options_value[0]
+          : val.options_value);
     });
 
     let same = false;
@@ -28,7 +33,10 @@ export const isInCart = (
     let current_page_state = Object.keys(variants);
 
     for (let i = 0; i < current_page_state.length; i++) {
-      if (variants[current_page_state[i]] !== new_obj[current_page_state[i]]) {
+      if (
+        variants[current_page_state[i] as keyof CartProductVariant] !==
+        new_obj[current_page_state[i]]
+      ) {
         return false;
       }
     }

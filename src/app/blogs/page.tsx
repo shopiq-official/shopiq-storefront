@@ -40,7 +40,7 @@ const Blogs = () => {
               <div className={styles.blog}>
                 <div className={styles.blog_image}>
                   <Image
-                    src={blog.image ?? ""}
+                    src={blog.image ?? "/placeholder.jpg"}
                     height={1500}
                     width={1500}
                     alt=""

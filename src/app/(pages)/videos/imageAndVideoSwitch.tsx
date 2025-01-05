@@ -4,10 +4,10 @@ import styles from "./deals.module.css";
 import Image from "next/image";
 import ProductCard from "./productCard";
 
-const ImageAndVideoSwitch = ({ media }: any) => {
+const ImageAndVideoSwitch = ({ media }: { media: Record<string, string> }) => {
   const [isVideoLoaded, setVideoLoaded] = useState(false);
   const [isHovered, setHovered] = useState(false);
-  const videoRef: any = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const handleLoad = () => {
@@ -17,11 +17,11 @@ const ImageAndVideoSwitch = ({ media }: any) => {
     if (videoRef?.current) {
       setVideoLoaded(false);
 
-      videoRef.current.addEventListener("loadeddata", handleLoad);
+      videoRef?.current.addEventListener("loadeddata", handleLoad);
     }
 
     return () => {
-      videoRef.current?.removeEventListener("loadeddata", handleLoad);
+      videoRef?.current?.removeEventListener("loadeddata", handleLoad);
     };
   }, [videoRef]);
 
@@ -39,7 +39,7 @@ const ImageAndVideoSwitch = ({ media }: any) => {
     return (
       <div className={styles.video_card}>
         <Image
-          src={media?.productImageUrl}
+          src={media?.productImageUrl || "/placeholder.jpg"}
           alt=""
           height={563}
           width={1000}
@@ -80,7 +80,9 @@ const ImageAndVideoSwitch = ({ media }: any) => {
         </div>
       )}
       <Image
-        src={media?.productImageUrl}
+        src={media?.productImageUrl || "/placeholder.jpg"}
+        height={1000}
+        width={1000}
         alt=""
         style={{
           height: "100%",

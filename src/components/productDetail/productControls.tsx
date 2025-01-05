@@ -1,24 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./productControls.module.css";
-import { useRouter } from "next/navigation";
-import Minus from "@/assets/Icons/minus.svg";
-import Add from "@/assets/Icons/add.svg";
-import { numToString } from "@/lib/numToString";
-import toast from "react-hot-toast";
-import { calculateAdvancePricing } from "@/lib/calcPrice";
 import { handlePaymentApi, placeOrder } from "@/api";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "@/redux/cart.slice";
-import { keyContextProps, useKeyContext } from "@/providers/keyProvider";
-import Quote from "../QuoteModal/Quote";
+import Add from "@/assets/Icons/add.svg";
+import Minus from "@/assets/Icons/minus.svg";
+import { calculateAdvancePricing } from "@/lib/calcPrice";
 import {
   CheckisOutOfStock,
   CheckisQuantityAvailable,
 } from "@/lib/checkOutOfStock";
+import { numToString } from "@/lib/numToString";
+import { keyContextProps, useKeyContext } from "@/providers/keyProvider";
+import { addToCart } from "@/redux/cart.slice";
 import { Discount, Product, variantProp } from "@/types";
-import { validateHeaderName } from "http";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import Quote from "../QuoteModal/Quote";
+import styles from "./productControls.module.css";
 
 let current_order = "";
 
@@ -39,7 +38,6 @@ const ProductControls = ({
   const [actualPrice, setActualPrice] = useState<number>(0);
   const [showQuote, setShowQuote] = useState(false);
   const [loading, setLoading] = useState(false);
-  const cart = useSelector((state: any) => state.cart.cart);
   const { key, isShippingChargeActive, shippingCharge }: keyContextProps =
     useKeyContext();
   const [isExpanded, setIsExpanded] = useState(false);

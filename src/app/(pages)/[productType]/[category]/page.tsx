@@ -80,7 +80,7 @@ const Page = async ({
               <>
                 <div className={styles.banner}>
                   <Image
-                    src={mediaUrl || ""}
+                    src={mediaUrl || "/placeholder.jpg"}
                     width={1000}
                     height={400}
                     alt=""

@@ -75,8 +75,7 @@ export default async function sitemap(): Promise<any> {
     });
   });
 
-  let cat_res =
-    (await getCategoriesOfType()) as unknown as { [key: string]: string[] };
+  let cat_res = await getCategoriesOfType();
 
   let keys = Object.keys(cat_res).filter((val) => val);
 

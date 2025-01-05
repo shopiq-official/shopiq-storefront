@@ -3,8 +3,14 @@ import { usePathname } from "next/navigation";
 
 import styles from "./footer.module.css";
 import FooterSmall from "./footerSmall";
+import { Category } from "@/types";
 
-export const ClientFooter = ({ categories, store }: any) => {
+interface FooterProps {
+  categories: Category[];
+  store: any;
+}
+
+export const ClientFooter = ({ categories, store }: FooterProps) => {
   const pathname = usePathname();
   const website = process.env.NEXT_PUBLIC_WEBSITE_URL;
 
