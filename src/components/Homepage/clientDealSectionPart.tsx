@@ -7,8 +7,10 @@ import Image from "next/image";
 import { getProductById } from "@/api";
 import "@splidejs/react-splide/css";
 import { useRouter } from "next/navigation";
+import { ProductMediaTypes } from "@/types/productMediaTypes";
+import { Product } from "@/types";
 
-const ClientDealSectionPart = ({ data }: any) => {
+const ClientDealSectionPart = ({ data }: { data: ProductMediaTypes[] }) => {
   // State variables for managing media, video index, hover state, and video playing status
   const [media, setMedia] = useState([]);
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
@@ -118,7 +120,7 @@ const ClientDealSectionPart = ({ data }: any) => {
           gap: "10px",
         }}
       >
-        {data.map((media: any, index: number) => {
+        {data.map((media: ProductMediaTypes, index: number) => {
           return (
             <SplideSlide key={index}>
               <div
@@ -165,8 +167,8 @@ const ClientDealSectionPart = ({ data }: any) => {
   );
 };
 
-const ProductCard = ({ products, shopBtn = true }: any) => {
-  const [data, setData]: any = useState([]);
+const ProductCard = ({ products, shopBtn = true }: {products:string[],shopBtn:boolean}) => {
+  const [data, setData] = useState<Product[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -205,7 +207,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
           pagination: true,
         }}
       >
-        {data.map((product: any, index: number) => {
+        {data.map((product: Product, index: number) => {
           return (
             <SplideSlide key={index}>
               <div
@@ -229,7 +231,7 @@ const ProductCard = ({ products, shopBtn = true }: any) => {
                     width={100}
                     height={100}
                     alt=""
-                    src={product?.mediaUrl[0] || "/placeholder.jpg"} // Display product image
+                    src={ product?.mediaUrl ? product?.mediaUrl[0] : "/placeholder.jpg"} // Display product image
                   />
 
                   <div style={{ lineHeight: ".9rem" }}>

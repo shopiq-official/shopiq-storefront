@@ -161,7 +161,7 @@ const Cart = (props: Props) => {
     }
 
     handlePaymentApi(data, current_order, res.token)
-      .then((ress: any) => {
+      .then((ress) => {
         res?.when_order_is_placed(() => {
           router.push("/account");
         });

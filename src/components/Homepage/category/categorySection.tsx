@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { capitalize } from "@/lib/capitalize";
 import CategoryCarousel from "./categoryCarousel";
+import { Category } from "@/types";
 
 const CategorySection = async () => {
   const category = await getCategories();
@@ -16,7 +17,7 @@ const CategorySection = async () => {
         <h1>Shop By Categories</h1>
       </div>
       <div className={styles.categories_main}>
-        {category?.map((val: any, ind: any) => {
+        {category?.map((val:Category, ind: number) => {
           return (
             <Link key={ind} href={"/" + val.title} className={styles.category}>
               {!!val?.media?.length && (
@@ -27,7 +28,7 @@ const CategorySection = async () => {
                   alt="not found"
                 />
               )}
-              <h4>{capitalize(val?.title)}</h4>
+              <h4>{capitalize(val?.title ?? "")}</h4>
             </Link>
           );
         })}

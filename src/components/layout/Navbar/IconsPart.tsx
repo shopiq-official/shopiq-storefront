@@ -26,7 +26,7 @@ interface IconsPartProps {
 }
 
 export const IconsPart = ({ cat, bs, data }: IconsPartProps) => {
-  console.log("cat data", cat);
+  // console.log("cat data", cat);
   useUTMData();
   const { getUserDeviceDetails } = useUserInfo();
   getUserDeviceDetails();

@@ -15,7 +15,7 @@ declare global {
       getAccessToken: () => string;
       CheckoutRetaino: any;
       LoginWindow: any;
-      loading: any;
+      loading: boolean;
     };
   }
 }

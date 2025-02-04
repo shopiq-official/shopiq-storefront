@@ -10,7 +10,6 @@ import {
 } from "@/api";
 import { IconsPart } from "./IconsPart";
 import { Suspense } from "react";
-import { navSequence } from "@/lib/navSequence";
 import Banners from "./banner";
 import { Category, Discount, Product } from "@/types";
 import Navmenu from "./navMenu";

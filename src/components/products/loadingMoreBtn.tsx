@@ -2,7 +2,17 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export const LoadMoreBtn = ({ total, searchParams, len }: any) => {
+interface Childprop {
+  total: number;
+  searchParams: Record<string, string | string[] | number | boolean>;
+  len: number;
+}
+
+export const LoadMoreBtn: React.FC<Childprop> = ({
+  total,
+  searchParams,
+  len,
+}) => {
   const [load, setLoad] = useState(false);
 
   useEffect(() => {

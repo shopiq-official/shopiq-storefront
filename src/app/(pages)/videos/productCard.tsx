@@ -9,8 +9,14 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Product } from "@/types";
 
-const ProductCard = ({ products, shopBtn = true }: any) => {
-  const [data, setData]: any = useState([]);
+const ProductCard = ({
+  products,
+  shopBtn = true,
+}: {
+  products: string[];
+  shopBtn?: boolean;
+}) => {
+  const [data, setData] = useState<Product[]>([]);
   const router = useRouter();
 
   useEffect(() => {

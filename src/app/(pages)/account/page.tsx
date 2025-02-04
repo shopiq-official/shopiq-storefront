@@ -9,11 +9,12 @@ import { retainoState } from "@/store/retaino/retaino.atom";
 import { useRouter } from "next/navigation";
 import { Metadata } from "next";
 import Orders from "@/components/account/orders";
+import { CartState } from "@/types";
 
 const Account = () => {
   // Get the current status from the Redux store
   const retainoStatus: string = useSelector(
-    (state: any) => state.retaino.state
+    (state: CartState) => state.retaino.state
   );
   const router = useRouter();
 

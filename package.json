@@ -1,6 +1,6 @@
 {
   "name": "@shopiq/storefront",
-  "version": "1.4.1",
+  "version": "1.5.1",
   "type": "module",
   "bin": "./bin/cli.js",
   "scripts": {

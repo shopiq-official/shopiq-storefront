@@ -34,6 +34,7 @@ const ContactForm = () => {
   };
 
   // Function to handle form submission
+
   const onSubmit = () => {
     if (validate()) {
       setLoading(true);

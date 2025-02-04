@@ -33,26 +33,7 @@ export interface Product {
   };
   productCost?: number;
   codPrice?: number;
-  inventory?: {
-    trackQuantity?: boolean;
-    addQuantity?: {
-      value: number;
-      date: string;
-    }[];
-    currentQuantity?: number;
-    safetyStock?: number;
-    sellOutstock?: boolean;
-    sku?: string;
-    barcode?: string;
-    isOutOfStock?: boolean;
-    purchaseCasePackQuantity?: number;
-    salesCasePackQuantity?: number;
-    brandName?: string;
-    productCode?: string;
-    productCodeAlias?: string[];
-    shortDescription?: string;
-    countryOfShipment?: string;
-  };
+  inventory?: InventoryInterface;
   similarProduct?: Product[];
   crossSellProducts?: Product[];
   epc?: epcProp[];
@@ -136,4 +117,25 @@ export type filterDataProps = {
     color?: string[];
   };
   specifications?: Record<string, string[]>;
+};
+
+export type InventoryInterface = {
+  trackQuantity?: boolean;
+  addQuantity?: {
+    value: number;
+    date: string;
+  }[];
+  currentQuantity?: number;
+  safetyStock?: number;
+  sellOutstock?: boolean;
+  sku?: string;
+  barcode?: string;
+  isOutOfStock?: boolean;
+  purchaseCasePackQuantity?: number;
+  salesCasePackQuantity?: number;
+  brandName?: string;
+  productCode?: string;
+  productCodeAlias?: string[];
+  shortDescription?: string;
+  countryOfShipment?: string;
 };

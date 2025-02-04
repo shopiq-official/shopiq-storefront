@@ -4,9 +4,10 @@ import Image from "next/image";
 import styles from "./homeContentOne.module.css";
 import Link from "next/link";
 import HomeContentCarousel from "./homeContentCarousel";
+import { Content } from "@/types";
 
 const HomeContentTwo = async () => {
-  const contents: any = await getContent();
+  const contents = (await getContent()) as unknown as { contents: Content[] };
 
   const banner2 = contents.contents[0]?.banner2;
 

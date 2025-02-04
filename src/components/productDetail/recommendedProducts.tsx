@@ -1,7 +1,7 @@
 import { getSimilarProductData } from "@/api";
 import ProductCarousel from "@/common/carousels/productCarousel/productCarousel";
 
-const RecommendedProducts = async ({ category, productType }: any) => {
+const RecommendedProducts = async ({ category, productType }: {category:string,productType:string}) => {
   const data = await getSimilarProductData(category, productType);
 
   return (

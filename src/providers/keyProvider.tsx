@@ -12,8 +12,12 @@ import { useSetRecoilState } from "recoil";
 
 const KeyContext = createContext({});
 
-export const KeyContextProvider = ({ children }: any) => {
-  const [key, setKey] = useState(null);
+export const KeyContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [key, setKey] = useState<string | null>(null);
   const [status, setStatus] = useState("loading");
   const [isMinOrderValueActive, setIsMinOrderValueActive] = useState(false);
   const [isShippingChargeActive, setIsShippingChargeActive] = useState(false);
@@ -22,8 +26,8 @@ export const KeyContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     async function getKeyValue() {
-      const res = await getKey();
-      setKey(res.key);
+      const res: any = await getKey();
+      setKey(res?.key);
       setStatus("ready");
     }
 

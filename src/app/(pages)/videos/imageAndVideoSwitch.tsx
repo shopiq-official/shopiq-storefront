@@ -3,8 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./deals.module.css";
 import Image from "next/image";
 import ProductCard from "./productCard";
+import { ProductMediaTypes } from "@/types/productMediaTypes";
 
-const ImageAndVideoSwitch = ({ media }: { media: Record<string, string> }) => {
+const ImageAndVideoSwitch = ({ media }: { media: ProductMediaTypes }) => {
   const [isVideoLoaded, setVideoLoaded] = useState(false);
   const [isHovered, setHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);

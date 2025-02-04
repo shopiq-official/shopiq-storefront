@@ -13,7 +13,7 @@ export const ActiveFilters = ({ params }: any) => {
   if (params_key.length === 0) return <></>;
 
   const handleRemove = (e: any) => {
-    const p_for = e.target.getAttribute("data-for");
+    const p_for = e?.target?.getAttribute("data-for");
     const temp_params = params;
 
     if (Array.isArray(params[p_for])) {
@@ -34,11 +34,11 @@ export const ActiveFilters = ({ params }: any) => {
         <Link href="/products">Clear All</Link>
       </div>
       <div className={styles.filter_list}>
-        {params_key.map((v: any, i: any) => {
+        {params_key.map((v: any, i: number) => {
           if (Array.isArray(params[v]))
             return (
               <>
-                {params[v]?.map((vv: any, ii: any) => {
+                {params[v]?.map((vv: any, ii: number) => {
                   return (
                     <div
                       key={ii}

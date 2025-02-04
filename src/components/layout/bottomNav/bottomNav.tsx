@@ -13,7 +13,17 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { CartState } from "@/types";
 
-const BottomNav = ({ cartLength, OpenCart, openSearch }: any) => {
+interface BottomNavChildProp {
+  cartLength?: number;
+  OpenCart: React.Dispatch<React.SetStateAction<boolean>>;
+  openSearch: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const BottomNav = ({
+  cartLength,
+  OpenCart,
+  openSearch,
+}: BottomNavChildProp) => {
   const router = useRouter();
   const pathname = usePathname();
   const cart = useSelector((state: CartState) => state.cart.cart.length);

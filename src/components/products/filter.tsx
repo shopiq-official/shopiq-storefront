@@ -41,7 +41,7 @@ export const Filter = async ({ params, data }: any) => {
           Object.keys(variants).length !== 0 &&
           Object.keys(variants)
             .filter((v) => v.toLowerCase() === "size")
-            .map((v: any, i: any) => {
+            .map((v: string, i: number) => {
               return (
                 <FilterSection
                   type="variant"
@@ -65,7 +65,7 @@ export const Filter = async ({ params, data }: any) => {
 
         {specifications &&
           Object.keys(specifications).length !== 0 &&
-          Object.keys(specifications).map((v: any, i: any) => {
+          Object.keys(specifications).map((v: string, i: number) => {
             return (
               <FilterSection
                 type="specification"

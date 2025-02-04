@@ -1,4 +1,6 @@
-export const checkProductStatus = (product: any) => {
+import { Order } from "@/types";
+
+export const checkProductStatus = (product: Order) => {
   if (product === undefined) {
     return {
       btn1value: " ",

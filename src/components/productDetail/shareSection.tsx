@@ -20,10 +20,10 @@ const ShareSection = () => {
 
   const pId = pathname.split("/").splice(-1);
 
-  const shareUrl = process.env.NEXT_PUBLIC_WEBSITE_URL+`/products/${pId}`;
+  const shareUrl = process.env.NEXT_PUBLIC_WEBSITE_URL + `/products/${pId}`;
   const title = process.env.NEXT_PUBLIC_WEBSITE_NAME_FOR_TITLE;
 
-  const copyToClipBoard = (e: any) => {
+  const copyToClipBoard = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigator.clipboard.writeText(shareUrl);
     setcopied(true);

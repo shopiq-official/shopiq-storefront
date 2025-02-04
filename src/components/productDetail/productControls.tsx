@@ -255,11 +255,12 @@ const ProductControls = ({
     setActualPrice(amount);
   }, [selectedvariant]);
 
-  const isOutOfStock: boolean = CheckisOutOfStock(data?.inventory, quantity);
-  const isQtyAvailable: boolean = CheckisQuantityAvailable(
-    data?.inventory,
-    quantity
-  );
+  const isOutOfStock: boolean = data?.inventory
+    ? CheckisOutOfStock(data.inventory, quantity)
+    : false;
+  const isQtyAvailable: boolean = data?.inventory
+    ? CheckisQuantityAvailable(data?.inventory, quantity)
+    : false;
 
   return (
     <>

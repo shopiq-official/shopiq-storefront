@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import styles from "./carouselWithTabs.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { Product } from "@/types";
 
 const ProductCarousel = dynamic(
   () => import("@/common/carousels/productCarousel/productCarousel"),
@@ -21,7 +22,7 @@ const CarouselWithTabs = ({
 }: {
   title: string;
   description: string;
-  data: any;
+  data: Product[];
   type?: string;
   link?: string;
 }) => {

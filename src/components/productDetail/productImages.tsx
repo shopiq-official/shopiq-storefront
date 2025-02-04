@@ -49,7 +49,7 @@ const ProductImages = ({ data, similar }: any) => {
       <div className={styles.secondary_images}>
         <div className={styles.embla_thumbs__viewport} ref={emblaThumbsRef}>
           <div className={styles.embla_thumbs__container}>
-            {data.map((img: any, index: number) => {
+            {data.map((img: string, index: number) => {
               return (
                 <Thumb
                   key={index}
@@ -65,7 +65,7 @@ const ProductImages = ({ data, similar }: any) => {
       </div>
       <div className={styles.main_image} ref={emblaMainRef}>
         <div className={styles.embla__container}>
-          {data.map((img: any, index: number) => {
+          {data.map((img: string, index: number) => {
             return (
               <div key={index} className={styles.embla__slides}>
                 <MyReactImageMagnify img={img} />

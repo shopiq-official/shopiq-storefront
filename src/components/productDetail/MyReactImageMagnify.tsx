@@ -3,12 +3,12 @@ import React, { useRef } from "react";
 import styles from "./magnify.module.css";
 import Image from "next/image";
 
-const MyReactImageMagnify = ({ img }: any) => {
+const MyReactImageMagnify = ({ img }: { img: string }) => {
   let ref = useRef(null);
-  let imgRef: any = useRef(null);
+  let imgRef = useRef<HTMLImageElement | null>(null);
 
   const handleMove = (event: any, e: any) => {
-    let rect = e.target.getBoundingClientRect();
+    let rect = e.target?.getBoundingClientRect();
     let x = event.clientX - rect.left;
     let y = event.clientY - rect.top;
 
@@ -27,12 +27,14 @@ const MyReactImageMagnify = ({ img }: any) => {
         className={styles.container}
         onMouseOver={(e: any) => {
           ref = e.target;
-          ref = e.target.addEventListener("mousemove", (event: any) =>
+          ref = e.target.addEventListener("mousemove", (event: MouseEvent) =>
             handleMove(event, e)
           );
         }}
-        onMouseLeave={(e: any) => {
-          e.target.removeEventListener("mousemove", handleMove);
+        onMouseLeave={(e) => {
+          e.target.removeEventListener("mousemove", (event: any) =>
+            handleMove(event, e)
+          );
         }}
       >
         <Image height={1000} width={1000} src={img} alt="" />
